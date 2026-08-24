@@ -13,7 +13,7 @@ uv run uvicorn main:app --reload --env-file .env
 Crea las aplicaciones OAuth aquí:
 
 - Strava: <https://www.strava.com/settings/api>
-- Oura: <https://cloud.ouraring.com/user/applications>
+- Oura: <https://developer.ouraring.com/applications>
 
 Configura los callbacks exactamente así:
 
