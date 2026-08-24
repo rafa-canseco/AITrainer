@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.141.1",
+    "garminconnect>=0.3.11",
     "httpx>=0.28.1",
     "uvicorn[standard]>=0.52.4",
 ]
