@@ -6,8 +6,23 @@ Importa datos de Strava, Garmin y Oura para analizar el entrenamiento y generar 
 
 ```bash
 uv sync
-uv run uvicorn main:app --reload
+cp .env.example .env
+uv run uvicorn main:app --reload --env-file .env
 ```
+
+Crea las aplicaciones OAuth aquí:
+
+- Strava: <https://www.strava.com/settings/api>
+- Oura: <https://cloud.ouraring.com/applications>
+
+Configura los callbacks exactamente así:
+
+```text
+http://127.0.0.1:8000/oauth/strava/callback
+http://127.0.0.1:8000/oauth/oura/callback
+```
+
+Después abre `/connect/strava` y `/connect/oura` en el navegador. No abras directamente `/oauth/.../callback`: esa URL solo funciona después de autorizar y recibir el parámetro `code`.
 
 La API queda en <http://127.0.0.1:8000> y crea la base SQLite local en `data/trainer.db`.
 
