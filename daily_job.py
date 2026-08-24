@@ -115,6 +115,53 @@ def today_status() -> str:
     return f"⏸️ No aparece completado: {planned['name']}. No se penaliza ni se duplica la carga; mañana continúa el siguiente paso del plan."
 
 
+def activity_day(item: dict) -> str:
+    return (item.get("day") or item.get("start_date") or item.get("startTimeLocal")
+            or item.get("startLocal") or item.get("start_datetime") or "")[:10]
+
+
+def daily_activity_summary() -> str:
+    today = date.today().isoformat()
+    daily = [item for item in records("oura", "daily_activity") if item.get("day") == today]
+    if not daily:
+        return "Oura todavía no tiene el resumen de actividad de hoy."
+    activity = max(daily, key=lambda item: item.get("timestamp", ""))
+    steps = activity.get("steps", 0)
+    target = activity.get("target_meters")
+    target_text = f" / meta Oura {target:,}" if isinstance(target, (int, float)) else ""
+    calories = activity.get("total_calories")
+
+    # Oura is primary. Garmin only fills activities that Oura did not report.
+    seen = set()
+    activities = []
+    for item in records("oura", "workout"):
+        if activity_day(item) != today:
+            continue
+        name = item.get("activity") or item.get("label") or "Actividad"
+        kcal = item.get("calories")
+        key = (name.lower(), round(float(kcal or 0)))
+        seen.add(key)
+        activities.append((name, kcal))
+    for item in records("garmin", "activity"):
+        if activity_day(item) != today:
+            continue
+        kind = item.get("activityType") or {}
+        name = kind.get("typeKey") or item.get("activityName") or kind.get("displayName") or "Actividad"
+        kcal = item.get("calories") or item.get("caloriesBurned")
+        key = (name.lower(), round(float(kcal or 0)))
+        if key not in seen:
+            activities.append((name, kcal))
+            seen.add(key)
+    lines = [f"Pasos: {steps:,}{target_text} · {'✅ cumplida' if target and steps >= target else '⏸️ pendiente'}"]
+    if calories is not None:
+        lines.append(f"Calorías totales quemadas: {float(calories):,.0f} kcal")
+    lines.append("Actividades: " + (", ".join(
+        f"{name}" + (f" ({float(kcal):,.0f} kcal)" if kcal is not None else "")
+        for name, kcal in activities
+    ) if activities else "ninguna registrada aparte de los pasos."))
+    return "\\n".join(lines)
+
+
 def next_training() -> tuple[dict | None, bool]:
     tomorrow = date.today() + timedelta(days=1)
     future = [item for item in load_workouts() if date.fromisoformat(item["date"]) >= tomorrow]
@@ -178,12 +225,14 @@ def send_email() -> None:
     workout_text = training_summary(workout)
     achievement_text = achievement()
     status_text = today_status()
+    activity_text = daily_activity_summary()
     body = "\n\n".join([
         "AI Trainer · Preparación nocturna",
         f"Hola, Rafa! 👋\n\nCómo dormiste\n{sleep}",
         f"Cómo dormir hoy\n{sleep_advice}",
         f"{heading}\n{workout_text}",
         f"Resumen del entrenamiento\n{status_text}",
+        f"Actividad del día\n{activity_text}",
         f"Logro\n{achievement_text}",
         "Recuerda sincronizar tu Forerunner 965 esta noche para recibir el entrenamiento.",
         "Garmin mantendrá automáticamente solo los próximos 3 entrenamientos.",
@@ -202,6 +251,7 @@ def send_email() -> None:
         {card('🛌', 'Cómo dormir hoy', sleep_advice, '#f4f0ff')}
         {card('🏃‍♂️' if workout and workout['type'] == 'run' else '💪', heading, workout_text, '#fff5df')}
         {card('📊', 'Resumen del entrenamiento', status_text, '#eef4ff')}
+        {card('🚶', 'Actividad del día', activity_text, '#eef8f4')}
         {card('🏆', 'Tu logro', achievement_text, '#eaf3ff')}
         {card('⌚', 'Recordatorio', 'Sincroniza tu Forerunner 965 esta noche para recibir el entrenamiento de mañana.', '#fff0f0')}
         <p style="font-size:13px;line-height:1.5;color:#65727d;margin:22px 4px 0;">Tu plan se sincroniza automáticamente y Garmin conserva solo los próximos 3 entrenamientos.</p>
