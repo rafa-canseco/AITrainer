@@ -43,4 +43,20 @@ La conexión directa con Garmin Connect usa una API no oficial. El primer login 
 uv run python garmin_sync.py --push
 ```
 
-El comando sube los 12 entrenamientos, los agenda y los envía al último dispositivo Garmin. Es reanudable: `data/garmin_plan_state.json` evita repetir lo que ya terminó.
+El comando mantiene solo los próximos días del plan, los agenda y los envía al último dispositivo Garmin. Es reanudable: `data/garmin_plan_state.json` evita repetir lo que ya terminó.
+
+## Sincronización y correo nocturno
+
+El trabajo nocturno sincroniza Strava/Oura, revisa el entrenamiento ejecutado, actualiza el logro y prepara el siguiente entrenamiento. Para Gmail crea una contraseña de aplicación y agrega `GMAIL_USER`, `GMAIL_APP_PASSWORD` y `EMAIL_TO` al `.env`.
+
+```bash
+uv run python daily_job.py --night
+```
+
+Para instalar dos ejecuciones diarias en macOS (mañana y 21:00):
+
+```bash
+uv run python install_schedule.py
+```
+
+La hora nocturna usa la zona horaria del Mac. Configúralo en `America/Mexico_City` para que sean las 21:00 CDMX.

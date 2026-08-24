@@ -2,12 +2,15 @@ import argparse
 import getpass
 import json
 import os
+from datetime import date, timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
 from garminconnect import Garmin
+from garminconnect.workout import StrengthWorkout, WorkoutSegment, create_strength_set
 
-PLAN_PATH = Path("plans/running-2026-08-25.json")
+RUN_PLAN_PATH = Path("plans/running-2026-08-25.json")
+STRENGTH_PLAN_PATH = Path("plans/bodyweight-2026-08-26.json")
 TOKEN_PATH = Path("data/garmin_tokens")
 STATE_PATH = Path("data/garmin_plan_state.json")
 
@@ -37,7 +40,6 @@ def target(zone: str | None, zones: dict[str, list[int]]) -> dict:
 
 def executable(step: dict, order: int, zones: dict[str, list[int]]) -> dict:
     condition = "distance" if "meters" in step else "time"
-    value = step.get("meters", step.get("seconds"))
     result = {
         "type": "ExecutableStepDTO",
         "stepOrder": order,
@@ -49,7 +51,7 @@ def executable(step: dict, order: int, zones: dict[str, list[int]]) -> dict:
             "conditionTypeId": 3 if condition == "distance" else 2,
             "conditionTypeKey": condition,
         },
-        "endConditionValue": value,
+        "endConditionValue": step.get("meters", step.get("seconds")),
     }
     result.update(target(step.get("zone"), zones))
     return result
@@ -83,6 +85,50 @@ def estimated_seconds(steps: list[dict]) -> int:
     return round(total)
 
 
+def load_workouts() -> list[dict]:
+    running = json.loads(RUN_PLAN_PATH.read_text())
+    strength = json.loads(STRENGTH_PLAN_PATH.read_text())
+    runs = [
+        {**day, "zones": running["zones"]}
+        for week in running["weeks"]
+        for day in week["days"]
+        if day["type"] == "run"
+    ]
+    return sorted(runs + strength["workouts"], key=lambda item: item["date"])
+
+
+def running_payload(day: dict) -> dict:
+    return {
+        "workoutName": day["name"],
+        "description": day["description"],
+        "sportType": {"sportTypeId": 1, "sportTypeKey": "running"},
+        "estimatedDurationInSecs": estimated_seconds(day["steps"]),
+        "workoutSegments": [{
+            "segmentOrder": 1,
+            "sportType": {"sportTypeId": 1, "sportTypeKey": "running"},
+            "workoutSteps": workout_steps(day["steps"], day["zones"]),
+        }],
+    }
+
+
+def strength_payload(day: dict) -> dict:
+    steps = []
+    order = 1
+    for category, exercise, sets, reps in day["exercises"]:
+        steps.append(create_strength_set(category, order, sets, reps, 90, exercise))
+        order += 3
+    return StrengthWorkout(
+        workoutName=day["name"],
+        description=f"{day['focus']}. Calienta hombros; 3 rondas de dead hang 30 s + 10 lagartijas. Deja 1 repetición en reserva.",
+        estimatedDurationInSecs=2700,
+        workoutSegments=[WorkoutSegment(
+            segmentOrder=1,
+            sportType={"sportTypeId": 5, "sportTypeKey": "strength_training"},
+            workoutSteps=steps,
+        )],
+    ).to_dict()
+
+
 def load_state() -> dict:
     return json.loads(STATE_PATH.read_text()) if STATE_PATH.exists() else {}
 
@@ -91,29 +137,38 @@ def save_state(state: dict) -> None:
     STATE_PATH.write_text(json.dumps(state, indent=2) + "\n")
 
 
-def upload_plan(push: bool) -> None:
-    plan = json.loads(PLAN_PATH.read_text())
-    zones = plan["zones"]
-    runs = [day for week in plan["weeks"] for day in week["days"] if day["type"] == "run"]
+def delete_tracked(client: Garmin, state: dict, *, all_workouts: bool = False) -> None:
+    cutoff = date.today().isoformat()
+    for key, item in list(state.items()):
+        if not all_workouts and item.get("date", key[:10]) >= cutoff:
+            continue
+        try:
+            client.delete_workout(item["workout_id"])
+        except Exception as error:
+            print(f"AVISO al borrar {key}: {error}")
+        else:
+            print(f"BORRADO {key}")
+        state.pop(key)
+        save_state(state)
+
+
+def upload_plan(push: bool = False, horizon_days: int = 7, replace: bool = False) -> None:
     client = garmin_client()
     state = load_state()
+    if replace:
+        delete_tracked(client, state, all_workouts=True)
+    else:
+        delete_tracked(client, state)
 
-    for day in runs:
+    start = date.today()
+    end = start + timedelta(days=horizon_days)
+    workouts = [day for day in load_workouts() if start <= date.fromisoformat(day["date"]) <= end]
+
+    for day in workouts:
         key = f"{day['date']} {day['name']}"
-        item = state.setdefault(key, {})
+        item = state.setdefault(key, {"date": day["date"], "type": day["type"]})
         if "workout_id" not in item:
-            steps = workout_steps(day["steps"], zones)
-            payload = {
-                "workoutName": day["name"],
-                "description": day["description"],
-                "sportType": {"sportTypeId": 1, "sportTypeKey": "running"},
-                "estimatedDurationInSecs": estimated_seconds(day["steps"]),
-                "workoutSegments": [{
-                    "segmentOrder": 1,
-                    "sportType": {"sportTypeId": 1, "sportTypeKey": "running"},
-                    "workoutSteps": steps,
-                }],
-            }
+            payload = running_payload(day) if day["type"] == "run" else strength_payload(day)
             uploaded = client.upload_workout(payload)
             item["workout_id"] = uploaded["workoutId"]
             save_state(state)
@@ -138,7 +193,9 @@ def upload_plan(push: bool) -> None:
 
 if __name__ == "__main__":
     load_dotenv()
-    parser = argparse.ArgumentParser(description="Sube y agenda el plan de carrera en Garmin Connect")
-    parser.add_argument("--push", action="store_true", help="Además envía cada workout al último dispositivo Garmin")
+    parser = argparse.ArgumentParser(description="Mantiene una ventana móvil del plan en Garmin Connect")
+    parser.add_argument("--days", type=int, default=7, help="Días futuros que se mantienen en Garmin")
+    parser.add_argument("--push", action="store_true", help="También envía cada workout al último dispositivo")
+    parser.add_argument("--replace", action="store_true", help="Borra los workouts administrados y vuelve a crear la ventana")
     args = parser.parse_args()
-    upload_plan(args.push)
+    upload_plan(args.push, args.days, args.replace)

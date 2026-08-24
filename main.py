@@ -3,6 +3,7 @@ import json
 import os
 import secrets
 import sqlite3
+import time
 from contextlib import asynccontextmanager
 from datetime import date, timedelta
 from pathlib import Path
@@ -83,6 +84,10 @@ def connection_for(source: str) -> sqlite3.Row | None:
 
 
 def save_connection(source: str, tokens: dict) -> None:
+    current = connection_for(source)
+    expires_at = tokens.get("expires_at")
+    if not expires_at and tokens.get("expires_in"):
+        expires_at = int(time.time()) + int(tokens["expires_in"])
     with db() as connection:
         connection.execute(
             """INSERT INTO connections(source, access_token, refresh_token, expires_at, scope)
@@ -90,8 +95,9 @@ def save_connection(source: str, tokens: dict) -> None:
                ON CONFLICT(source) DO UPDATE SET access_token=excluded.access_token,
                  refresh_token=excluded.refresh_token, expires_at=excluded.expires_at,
                  scope=excluded.scope""",
-            (source, tokens["access_token"], tokens.get("refresh_token"),
-             tokens.get("expires_at"), tokens.get("scope")),
+            (source, tokens["access_token"], tokens.get("refresh_token")
+             or (current["refresh_token"] if current else None), expires_at,
+             tokens.get("scope") or (current["scope"] if current else None)),
         )
 
 
@@ -115,6 +121,24 @@ def save_records(source: str, kind: str, records: list[dict]) -> int:
     return inserted
 
 
+async def refresh_connection(source: str) -> None:
+    config = require_source(source)
+    connection = connection_for(source)
+    client_id = os.getenv(config["client_id"])
+    client_secret = os.getenv(config["client_secret"])
+    if not connection or not connection["refresh_token"] or not client_id or not client_secret:
+        raise HTTPException(401, f"No se puede renovar {source}; vuelve a conectar")
+    async with httpx.AsyncClient(timeout=30) as client:
+        response = await client.post(config["token"], data={
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "grant_type": "refresh_token",
+            "refresh_token": connection["refresh_token"],
+        })
+        response.raise_for_status()
+        save_connection(source, response.json())
+
+
 async def fetch_json(source: str, url: str, **params) -> dict | list:
     connection = connection_for(source)
     if not connection:
@@ -124,7 +148,12 @@ async def fetch_json(source: str, url: str, **params) -> dict | list:
             url, params=params, headers={"Authorization": f"Bearer {connection['access_token']}"}
         )
         if response.status_code == 401:
-            raise HTTPException(401, f"Token expirado de {source}; vuelve a conectar")
+            await refresh_connection(source)
+            connection = connection_for(source)
+            response = await client.get(
+                url, params=params,
+                headers={"Authorization": f"Bearer {connection['access_token']}"},
+            )
         response.raise_for_status()
         return response.json()
 

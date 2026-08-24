@@ -1,0 +1,27 @@
+{
+  "name": "Fuerza con peso corporal - 4 semanas",
+  "start_date": "2026-08-26",
+  "rules": [
+    "Calienta hombros 5 minutos.",
+    "Haz 3 rondas de 30 segundos de dead hang y 10 lagartijas.",
+    "Detén cada serie principal con 1 repetición en reserva; no llegues al fallo salvo en la última serie opcional.",
+    "Si hay dolor de hombro o codo, elimina dips y reduce pull-ups."
+  ],
+  "workouts": [
+    {"date":"2026-08-26","type":"strength","name":"W1 Cuerpo A","focus":"Pull y core","exercises":[["PUSH_UP","PUSH_UP",3,10],["SHRUG","SCAPULAR_RETRACTION",3,8],["LEG_RAISE","HANGING_KNEE_RAISE",3,10],["PULL_UP","PULL_UP",5,2],["ROW","RING_ROW",3,10],["TRICEPS_EXTENSION","BODY_WEIGHT_DIP",3,4]]},
+    {"date":"2026-08-28","type":"strength","name":"W1 Cuerpo B","focus":"Push y balance","exercises":[["PUSH_UP","PUSH_UP",3,10],["SHRUG","SCAPULAR_RETRACTION",3,8],["PULL_UP","PULL_UP",3,2],["ROW","RING_ROW",3,12],["TRICEPS_EXTENSION","BODY_WEIGHT_DIP",4,4],["LEG_RAISE","HANGING_KNEE_RAISE",3,10]]},
+    {"date":"2026-08-31","type":"strength","name":"W1 Cuerpo A2","focus":"Pull y core","exercises":[["PUSH_UP","PUSH_UP",3,10],["SHRUG","SCAPULAR_RETRACTION",3,8],["LEG_RAISE","HANGING_KNEE_RAISE",3,10],["PULL_UP","PULL_UP",5,2],["ROW","RING_ROW",3,10],["TRICEPS_EXTENSION","BODY_WEIGHT_DIP",3,4]]},
+
+    {"date":"2026-09-02","type":"strength","name":"W2 Cuerpo A","focus":"Pull y core","exercises":[["PUSH_UP","PUSH_UP",3,12],["SHRUG","SCAPULAR_RETRACTION",3,10],["LEG_RAISE","HANGING_KNEE_RAISE",3,12],["PULL_UP","PULL_UP",6,2],["ROW","RING_ROW",3,12],["TRICEPS_EXTENSION","BODY_WEIGHT_DIP",3,5]]},
+    {"date":"2026-09-04","type":"strength","name":"W2 Cuerpo B","focus":"Push y balance","exercises":[["PUSH_UP","PUSH_UP",4,10],["SHRUG","SCAPULAR_RETRACTION",3,10],["PULL_UP","PULL_UP",3,2],["ROW","RING_ROW",3,12],["TRICEPS_EXTENSION","BODY_WEIGHT_DIP",4,5],["LEG_RAISE","HANGING_KNEE_RAISE",3,12]]},
+    {"date":"2026-09-07","type":"strength","name":"W2 Cuerpo A2","focus":"Pull y core","exercises":[["PUSH_UP","PUSH_UP",3,12],["SHRUG","SCAPULAR_RETRACTION",3,10],["LEG_RAISE","HANGING_KNEE_RAISE",3,12],["PULL_UP","PULL_UP",6,2],["ROW","RING_ROW",3,12],["TRICEPS_EXTENSION","BODY_WEIGHT_DIP",3,5]]},
+
+    {"date":"2026-09-09","type":"strength","name":"W3 Cuerpo A","focus":"Pull y core","exercises":[["PUSH_UP","PUSH_UP",4,10],["SHRUG","SCAPULAR_RETRACTION",3,10],["LEG_RAISE","HANGING_KNEE_RAISE",3,12],["PULL_UP","PULL_UP",5,3],["ROW","RING_ROW",4,10],["TRICEPS_EXTENSION","BODY_WEIGHT_DIP",4,5]]},
+    {"date":"2026-09-11","type":"strength","name":"W3 Cuerpo B","focus":"Push y balance","exercises":[["PUSH_UP","PUSH_UP",4,12],["SHRUG","SCAPULAR_RETRACTION",3,10],["PULL_UP","PULL_UP",4,2],["ROW","RING_ROW",4,10],["TRICEPS_EXTENSION","BODY_WEIGHT_DIP",4,5],["LEG_RAISE","HANGING_KNEE_RAISE",4,10]]},
+    {"date":"2026-09-14","type":"strength","name":"W3 Cuerpo A2","focus":"Pull y core","exercises":[["PUSH_UP","PUSH_UP",4,10],["SHRUG","SCAPULAR_RETRACTION",3,10],["LEG_RAISE","HANGING_KNEE_RAISE",3,12],["PULL_UP","PULL_UP",5,3],["ROW","RING_ROW",4,10],["TRICEPS_EXTENSION","BODY_WEIGHT_DIP",4,5]]},
+
+    {"date":"2026-09-16","type":"strength","name":"W4 Cuerpo suave A","focus":"Descarga","exercises":[["PUSH_UP","PUSH_UP",2,10],["SHRUG","SCAPULAR_RETRACTION",2,8],["LEG_RAISE","HANGING_KNEE_RAISE",2,10],["PULL_UP","PULL_UP",3,2],["ROW","RING_ROW",2,10],["TRICEPS_EXTENSION","BODY_WEIGHT_DIP",2,4]]},
+    {"date":"2026-09-18","type":"strength","name":"W4 Cuerpo suave B","focus":"Descarga","exercises":[["PUSH_UP","PUSH_UP",2,10],["SHRUG","SCAPULAR_RETRACTION",2,8],["PULL_UP","PULL_UP",3,2],["ROW","RING_ROW",2,10],["TRICEPS_EXTENSION","BODY_WEIGHT_DIP",2,4],["LEG_RAISE","HANGING_KNEE_RAISE",2,10]]},
+    {"date":"2026-09-21","type":"strength","name":"W4 Cuerpo suave A2","focus":"Descarga","exercises":[["PUSH_UP","PUSH_UP",2,10],["SHRUG","SCAPULAR_RETRACTION",2,8],["LEG_RAISE","HANGING_KNEE_RAISE",2,10],["PULL_UP","PULL_UP",3,2],["ROW","RING_ROW",2,10],["TRICEPS_EXTENSION","BODY_WEIGHT_DIP",2,4]]}
+  ]
+}
