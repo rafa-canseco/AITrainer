@@ -1,62 +1,463 @@
 {
   "name": "Mejora de carrera - 4 semanas",
-  "start_date": "2026-08-25",
+  "start_date": "2026-08-24",
   "basis": "46 carreras y 238.9 km entre 2026-02-24 y 2026-08-24; ritmo medio 8:58/km; tirada máxima 10.04 km",
   "zones": {
     "method": "Provisionales por reserva cardiaca: FC reposo 66 (mediana Oura) y FC máxima fiable estimada 192. Recalibrar tras la prueba de 30 minutos de la semana 4.",
-    "Z1": [129, 141],
-    "Z2": [142, 154],
-    "Z3": [155, 166],
-    "Z4": [167, 179],
-    "Z5": [180, 192]
+    "Z1": [
+      129,
+      141
+    ],
+    "Z2": [
+      142,
+      154
+    ],
+    "Z3": [
+      155,
+      166
+    ],
+    "Z4": [
+      167,
+      179
+    ],
+    "Z5": [
+      180,
+      192
+    ]
   },
   "weeks": [
     {
       "week": 1,
       "days": [
-        {"date": "2026-08-25", "type": "run", "name": "W1 Intervalos 6x2", "description": "Controlado, no sprint. La FC tarda en subir; manda el esfuerzo.", "steps": [{"type": "warmup", "seconds": 900, "zone": "Z2"}, {"type": "repeat", "times": 6, "steps": [{"type": "interval", "seconds": 120, "zone": "Z4"}, {"type": "recovery", "seconds": 120, "zone": "Z1"}]}, {"type": "cooldown", "seconds": 600, "zone": "Z1"}]},
-        {"date": "2026-08-26", "type": "recovery", "name": "Movilidad o caminata 25 min"},
-        {"date": "2026-08-27", "type": "run", "name": "W1 Facil 45", "description": "Conversacional.", "steps": [{"type": "warmup", "seconds": 600, "zone": "Z1"}, {"type": "interval", "seconds": 1800, "zone": "Z2"}, {"type": "cooldown", "seconds": 300, "zone": "Z1"}]},
-        {"date": "2026-08-28", "type": "rest", "name": "Descanso"},
-        {"date": "2026-08-29", "type": "strength", "name": "Fuerza general 25 min"},
-        {"date": "2026-08-30", "type": "run", "name": "W1 Largo 8K", "description": "Sin acelerar al final.", "steps": [{"type": "warmup", "meters": 1000, "zone": "Z1"}, {"type": "interval", "meters": 6500, "zone": "Z2"}, {"type": "cooldown", "meters": 500, "zone": "Z1"}]},
-        {"date": "2026-08-31", "type": "rest", "name": "Descanso"}
+        {
+          "date": "2026-08-24",
+          "type": "run",
+          "name": "W1 Intervalos 6x2",
+          "description": "Controlado, no sprint. La FC tarda en subir; manda el esfuerzo.",
+          "steps": [
+            {
+              "type": "warmup",
+              "seconds": 900,
+              "zone": "Z2"
+            },
+            {
+              "type": "repeat",
+              "times": 6,
+              "steps": [
+                {
+                  "type": "interval",
+                  "seconds": 120,
+                  "zone": "Z4"
+                },
+                {
+                  "type": "recovery",
+                  "seconds": 120,
+                  "zone": "Z1"
+                }
+              ]
+            },
+            {
+              "type": "cooldown",
+              "seconds": 600,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "date": "2026-08-25",
+          "type": "recovery",
+          "name": "Movilidad o caminata 25 min"
+        },
+        {
+          "date": "2026-08-26",
+          "type": "run",
+          "name": "W1 Facil 45",
+          "description": "Conversacional.",
+          "steps": [
+            {
+              "type": "warmup",
+              "seconds": 600,
+              "zone": "Z1"
+            },
+            {
+              "type": "interval",
+              "seconds": 1800,
+              "zone": "Z2"
+            },
+            {
+              "type": "cooldown",
+              "seconds": 300,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "date": "2026-08-27",
+          "type": "rest",
+          "name": "Descanso"
+        },
+        {
+          "date": "2026-08-28",
+          "type": "strength",
+          "name": "Fuerza general 25 min"
+        },
+        {
+          "date": "2026-08-29",
+          "type": "run",
+          "name": "W1 Largo 8K",
+          "description": "Sin acelerar al final.",
+          "steps": [
+            {
+              "type": "warmup",
+              "meters": 1000,
+              "zone": "Z1"
+            },
+            {
+              "type": "interval",
+              "meters": 6500,
+              "zone": "Z2"
+            },
+            {
+              "type": "cooldown",
+              "meters": 500,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "date": "2026-08-30",
+          "type": "rest",
+          "name": "Descanso"
+        }
       ]
     },
     {
       "week": 2,
       "days": [
-        {"date": "2026-09-01", "type": "run", "name": "W2 Intervalos 5x3", "description": "Fuerte sostenible.", "steps": [{"type": "warmup", "seconds": 900, "zone": "Z2"}, {"type": "repeat", "times": 5, "steps": [{"type": "interval", "seconds": 180, "zone": "Z4"}, {"type": "recovery", "seconds": 120, "zone": "Z1"}]}, {"type": "cooldown", "seconds": 600, "zone": "Z1"}]},
-        {"date": "2026-09-02", "type": "recovery", "name": "Movilidad o caminata 25 min"},
-        {"date": "2026-09-03", "type": "run", "name": "W2 Facil y strides", "description": "Los strides son rápidos y relajados, no sprint.", "steps": [{"type": "warmup", "seconds": 600, "zone": "Z1"}, {"type": "interval", "seconds": 1500, "zone": "Z2"}, {"type": "repeat", "times": 6, "steps": [{"type": "interval", "seconds": 20}, {"type": "recovery", "seconds": 70, "zone": "Z1"}]}, {"type": "cooldown", "seconds": 300, "zone": "Z1"}]},
-        {"date": "2026-09-04", "type": "rest", "name": "Descanso"},
-        {"date": "2026-09-05", "type": "strength", "name": "Fuerza general 25 min"},
-        {"date": "2026-09-06", "type": "run", "name": "W2 Largo 9K", "description": "Todo conversacional.", "steps": [{"type": "warmup", "meters": 1000, "zone": "Z1"}, {"type": "interval", "meters": 7500, "zone": "Z2"}, {"type": "cooldown", "meters": 500, "zone": "Z1"}]},
-        {"date": "2026-09-07", "type": "rest", "name": "Descanso"}
+        {
+          "date": "2026-08-31",
+          "type": "run",
+          "name": "W2 Intervalos 5x3",
+          "description": "Fuerte sostenible.",
+          "steps": [
+            {
+              "type": "warmup",
+              "seconds": 900,
+              "zone": "Z2"
+            },
+            {
+              "type": "repeat",
+              "times": 5,
+              "steps": [
+                {
+                  "type": "interval",
+                  "seconds": 180,
+                  "zone": "Z4"
+                },
+                {
+                  "type": "recovery",
+                  "seconds": 120,
+                  "zone": "Z1"
+                }
+              ]
+            },
+            {
+              "type": "cooldown",
+              "seconds": 600,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "date": "2026-09-01",
+          "type": "recovery",
+          "name": "Movilidad o caminata 25 min"
+        },
+        {
+          "date": "2026-09-02",
+          "type": "run",
+          "name": "W2 Facil y strides",
+          "description": "Los strides son rápidos y relajados, no sprint.",
+          "steps": [
+            {
+              "type": "warmup",
+              "seconds": 600,
+              "zone": "Z1"
+            },
+            {
+              "type": "interval",
+              "seconds": 1500,
+              "zone": "Z2"
+            },
+            {
+              "type": "repeat",
+              "times": 6,
+              "steps": [
+                {
+                  "type": "interval",
+                  "seconds": 20
+                },
+                {
+                  "type": "recovery",
+                  "seconds": 70,
+                  "zone": "Z1"
+                }
+              ]
+            },
+            {
+              "type": "cooldown",
+              "seconds": 300,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "date": "2026-09-03",
+          "type": "rest",
+          "name": "Descanso"
+        },
+        {
+          "date": "2026-09-04",
+          "type": "strength",
+          "name": "Fuerza general 25 min"
+        },
+        {
+          "date": "2026-09-05",
+          "type": "run",
+          "name": "W2 Largo 9K",
+          "description": "Todo conversacional.",
+          "steps": [
+            {
+              "type": "warmup",
+              "meters": 1000,
+              "zone": "Z1"
+            },
+            {
+              "type": "interval",
+              "meters": 7500,
+              "zone": "Z2"
+            },
+            {
+              "type": "cooldown",
+              "meters": 500,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "date": "2026-09-06",
+          "type": "rest",
+          "name": "Descanso"
+        }
       ]
     },
     {
       "week": 3,
       "days": [
-        {"date": "2026-09-08", "type": "run", "name": "W3 Tempo 3x8", "description": "Ritmo firme y uniforme.", "steps": [{"type": "warmup", "seconds": 900, "zone": "Z2"}, {"type": "repeat", "times": 3, "steps": [{"type": "interval", "seconds": 480, "zone": "Z3"}, {"type": "recovery", "seconds": 180, "zone": "Z1"}]}, {"type": "cooldown", "seconds": 600, "zone": "Z1"}]},
-        {"date": "2026-09-09", "type": "recovery", "name": "Movilidad o caminata 25 min"},
-        {"date": "2026-09-10", "type": "run", "name": "W3 Facil 50", "description": "Conversacional.", "steps": [{"type": "warmup", "seconds": 600, "zone": "Z1"}, {"type": "interval", "seconds": 2100, "zone": "Z2"}, {"type": "cooldown", "seconds": 300, "zone": "Z1"}]},
-        {"date": "2026-09-11", "type": "rest", "name": "Descanso"},
-        {"date": "2026-09-12", "type": "strength", "name": "Fuerza general 25 min"},
-        {"date": "2026-09-13", "type": "run", "name": "W3 Largo 10K", "description": "Máxima distancia del bloque, sin buscar marca.", "steps": [{"type": "warmup", "meters": 1000, "zone": "Z1"}, {"type": "interval", "meters": 8500, "zone": "Z2"}, {"type": "cooldown", "meters": 500, "zone": "Z1"}]},
-        {"date": "2026-09-14", "type": "rest", "name": "Descanso"}
+        {
+          "date": "2026-09-07",
+          "type": "run",
+          "name": "W3 Tempo 3x8",
+          "description": "Ritmo firme y uniforme.",
+          "steps": [
+            {
+              "type": "warmup",
+              "seconds": 900,
+              "zone": "Z2"
+            },
+            {
+              "type": "repeat",
+              "times": 3,
+              "steps": [
+                {
+                  "type": "interval",
+                  "seconds": 480,
+                  "zone": "Z3"
+                },
+                {
+                  "type": "recovery",
+                  "seconds": 180,
+                  "zone": "Z1"
+                }
+              ]
+            },
+            {
+              "type": "cooldown",
+              "seconds": 600,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "date": "2026-09-08",
+          "type": "recovery",
+          "name": "Movilidad o caminata 25 min"
+        },
+        {
+          "date": "2026-09-09",
+          "type": "run",
+          "name": "W3 Facil 50",
+          "description": "Conversacional.",
+          "steps": [
+            {
+              "type": "warmup",
+              "seconds": 600,
+              "zone": "Z1"
+            },
+            {
+              "type": "interval",
+              "seconds": 2100,
+              "zone": "Z2"
+            },
+            {
+              "type": "cooldown",
+              "seconds": 300,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "date": "2026-09-10",
+          "type": "rest",
+          "name": "Descanso"
+        },
+        {
+          "date": "2026-09-11",
+          "type": "strength",
+          "name": "Fuerza general 25 min"
+        },
+        {
+          "date": "2026-09-12",
+          "type": "run",
+          "name": "W3 Largo 10K",
+          "description": "Máxima distancia del bloque, sin buscar marca.",
+          "steps": [
+            {
+              "type": "warmup",
+              "meters": 1000,
+              "zone": "Z1"
+            },
+            {
+              "type": "interval",
+              "meters": 8500,
+              "zone": "Z2"
+            },
+            {
+              "type": "cooldown",
+              "meters": 500,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "date": "2026-09-13",
+          "type": "rest",
+          "name": "Descanso"
+        }
       ]
     },
     {
       "week": 4,
       "days": [
-        {"date": "2026-09-15", "type": "run", "name": "W4 Rapidos 6x1", "description": "Ágil, técnica limpia, sin sprint.", "steps": [{"type": "warmup", "seconds": 900, "zone": "Z2"}, {"type": "repeat", "times": 6, "steps": [{"type": "interval", "seconds": 60, "zone": "Z4"}, {"type": "recovery", "seconds": 120, "zone": "Z1"}]}, {"type": "cooldown", "seconds": 600, "zone": "Z1"}]},
-        {"date": "2026-09-16", "type": "recovery", "name": "Movilidad o caminata 20 min"},
-        {"date": "2026-09-17", "type": "run", "name": "W4 Facil 35", "description": "Descarga.", "steps": [{"type": "warmup", "seconds": 600, "zone": "Z1"}, {"type": "interval", "seconds": 1200, "zone": "Z2"}, {"type": "cooldown", "seconds": 300, "zone": "Z1"}]},
-        {"date": "2026-09-18", "type": "rest", "name": "Descanso"},
-        {"date": "2026-09-19", "type": "rest", "name": "Descanso"},
-        {"date": "2026-09-20", "type": "run", "name": "W4 Test umbral 30", "description": "15 min suave; 30 min máximo sostenible. Usar FC media de los últimos 20 min para recalibrar zonas.", "steps": [{"type": "warmup", "seconds": 900, "zone": "Z2"}, {"type": "interval", "seconds": 1800}, {"type": "cooldown", "seconds": 600, "zone": "Z1"}]},
-        {"date": "2026-09-21", "type": "rest", "name": "Descanso"}
+        {
+          "date": "2026-09-14",
+          "type": "run",
+          "name": "W4 Rapidos 6x1",
+          "description": "Ágil, técnica limpia, sin sprint.",
+          "steps": [
+            {
+              "type": "warmup",
+              "seconds": 900,
+              "zone": "Z2"
+            },
+            {
+              "type": "repeat",
+              "times": 6,
+              "steps": [
+                {
+                  "type": "interval",
+                  "seconds": 60,
+                  "zone": "Z4"
+                },
+                {
+                  "type": "recovery",
+                  "seconds": 120,
+                  "zone": "Z1"
+                }
+              ]
+            },
+            {
+              "type": "cooldown",
+              "seconds": 600,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "date": "2026-09-15",
+          "type": "recovery",
+          "name": "Movilidad o caminata 20 min"
+        },
+        {
+          "date": "2026-09-16",
+          "type": "run",
+          "name": "W4 Facil 35",
+          "description": "Descarga.",
+          "steps": [
+            {
+              "type": "warmup",
+              "seconds": 600,
+              "zone": "Z1"
+            },
+            {
+              "type": "interval",
+              "seconds": 1200,
+              "zone": "Z2"
+            },
+            {
+              "type": "cooldown",
+              "seconds": 300,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "date": "2026-09-17",
+          "type": "rest",
+          "name": "Descanso"
+        },
+        {
+          "date": "2026-09-18",
+          "type": "rest",
+          "name": "Descanso"
+        },
+        {
+          "date": "2026-09-19",
+          "type": "run",
+          "name": "W4 Test umbral 30",
+          "description": "15 min suave; 30 min máximo sostenible. Usar FC media de los últimos 20 min para recalibrar zonas.",
+          "steps": [
+            {
+              "type": "warmup",
+              "seconds": 900,
+              "zone": "Z2"
+            },
+            {
+              "type": "interval",
+              "seconds": 1800
+            },
+            {
+              "type": "cooldown",
+              "seconds": 600,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "date": "2026-09-20",
+          "type": "rest",
+          "name": "Descanso"
+        }
       ]
     }
   ]
