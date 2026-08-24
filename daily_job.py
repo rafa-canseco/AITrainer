@@ -1,5 +1,6 @@
 import argparse
 import asyncio
+import html
 import json
 import os
 import sqlite3
@@ -8,7 +9,7 @@ from datetime import date, datetime, timedelta
 import httpx
 from dotenv import load_dotenv
 
-from garmin_sync import load_workouts, upload_plan
+from garmin_sync import load_workouts, sync_garmin_activities, upload_plan
 from main import DB_PATH, init_db, sync_oura, sync_strava
 
 EXERCISE_NAMES = {
@@ -99,7 +100,23 @@ def next_training() -> tuple[dict | None, bool]:
     return future[0], future[0]["date"] == tomorrow.isoformat()
 
 
+def training_streak() -> int:
+    days = set()
+    for source, kind in (("strava", "activity"), ("garmin", "activity")):
+        for item in records(source, kind):
+            raw = item.get("start_date") or item.get("startLocal") or item.get("startTimeLocal")
+            if raw:
+                days.add(raw[:10])
+    streak = 0
+    cursor = date.today()
+    while cursor.isoformat() in days:
+        streak += 1
+        cursor -= timedelta(days=1)
+    return streak
+
+
 def achievement() -> str:
+    streak = training_streak()
     runs = []
     for item in records("strava", "activity"):
         if item.get("sport_type") not in ("Run", "VirtualRun") or not item.get("moving_time"):
@@ -121,9 +138,9 @@ def achievement() -> str:
         baseline = sum(item["moving_time"] / (item["distance"] / 1000) / 60 for item in comparable) / len(comparable)
         if latest_pace < baseline * 0.97:
             improvement = round((baseline - latest_pace) * 60)
-            return f"Logro: tu última carrera fue {improvement} s/km más rápida que tus carreras comparables de los 60 días previos."
+            return f"Logro: tu última carrera fue {improvement} s/km más rápida que tus carreras comparables. Racha actual: {streak} día(s)."
     week_count = sum(activity_date >= date.today() - timedelta(days=7) for activity_date, _ in runs)
-    return f"Progreso: completaste {week_count} carrera(s) en los últimos 7 días. La siguiente meta es sostener 3 por semana."
+    return f"Progreso: completaste {week_count} carrera(s) en los últimos 7 días. Racha actual: {streak} día(s). La siguiente meta es sostener 3 por semana."
 
 
 def send_email() -> None:
@@ -135,22 +152,39 @@ def send_email() -> None:
     sleep, sleep_advice = sleep_summary()
     workout, is_tomorrow = next_training()
     heading = "Entrenamiento de mañana" if is_tomorrow else "Mañana toca descanso; próximo entrenamiento"
+    workout_text = training_summary(workout)
+    achievement_text = achievement()
     body = "\n\n".join([
         "AI Trainer · Preparación nocturna",
-        f"CÓMO DORMISTE\n{sleep}",
-        f"CÓMO DORMIR HOY\n{sleep_advice}",
-        f"{heading.upper()}\n{training_summary(workout)}",
-        f"LOGRO\n{achievement()}",
-        "Tu Garmin mantendrá automáticamente solo los próximos 7 días del plan.",
+        f"Hola, Rafa! 👋\n\nCómo dormiste\n{sleep}",
+        f"Cómo dormir hoy\n{sleep_advice}",
+        f"{heading}\n{workout_text}",
+        f"Logro\n{achievement_text}",
+        "Recuerda sincronizar tu Forerunner 965 esta noche para recibir el entrenamiento.",
+        "Garmin mantendrá automáticamente solo los próximos 3 entrenamientos.",
     ])
-    html = "<br>".join(
-        line.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-        for line in body.splitlines()
-    )
+    def card(emoji: str, title: str, content: str, color: str) -> str:
+        return f'''<section style="background:{color};border-radius:16px;padding:20px 22px;margin:14px 0;">
+          <div style="font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#53606b;">{emoji} {html.escape(title)}</div>
+          <div style="font-size:16px;line-height:1.65;white-space:pre-line;margin-top:8px;color:#18212b;">{html.escape(content)}</div>
+        </section>'''
+    html_body = f'''<div style="margin:0;background:#f4f7f8;padding:24px 12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#18212b;">
+      <main style="max-width:620px;margin:auto;background:#ffffff;border-radius:22px;padding:26px;box-shadow:0 5px 24px #17212b14;">
+        <div style="font-size:13px;color:#65727d;letter-spacing:.08em;text-transform:uppercase;">AI Trainer · preparación nocturna</div>
+        <h1 style="font-size:28px;line-height:1.2;margin:10px 0 4px;">Hola, Rafa! 👋</h1>
+        <p style="margin:0 0 18px;color:#65727d;font-size:15px;">Un vistazo a tu recuperación y a lo que toca mañana.</p>
+        {card('🌙', 'Cómo dormiste', sleep, '#eef8f4')}
+        {card('🛌', 'Cómo dormir hoy', sleep_advice, '#f4f0ff')}
+        {card('🏃‍♂️' if workout and workout['type'] == 'run' else '💪', heading, workout_text, '#fff5df')}
+        {card('🏆', 'Tu logro', achievement_text, '#eaf3ff')}
+        {card('⌚', 'Recordatorio', 'Sincroniza tu Forerunner 965 esta noche para recibir el entrenamiento de mañana.', '#fff0f0')}
+        <p style="font-size:13px;line-height:1.5;color:#65727d;margin:22px 4px 0;">Tu plan se sincroniza automáticamente y Garmin conserva solo los próximos 3 entrenamientos.</p>
+      </main>
+    </div>'''
     response = httpx.post(
         "https://api.resend.com/emails",
         headers={"Authorization": f"Bearer {api_key}"},
-        json={"from": sender, "to": [recipient], "subject": f"AI Trainer · {heading}", "html": f"<pre>{html}</pre>"},
+        json={"from": sender, "to": [recipient], "subject": f"AI Trainer · {heading}", "html": html_body, "text": body},
         timeout=30,
     )
     response.raise_for_status()
@@ -159,7 +193,11 @@ def send_email() -> None:
 
 async def sync_sources() -> None:
     strava, oura = await asyncio.gather(sync_strava(), sync_oura())
-    print(f"Sincronización: Strava +{strava}, Oura +{oura}")
+    try:
+        garmin = await asyncio.to_thread(sync_garmin_activities)
+    except Exception as error:
+        garmin = f"error: {error}"
+    print(f"Sincronización: Strava +{strava}, Oura +{oura}, Garmin +{garmin}")
 
 
 if __name__ == "__main__":
@@ -170,6 +208,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     asyncio.run(sync_sources())
     if args.night:
-        upload_plan(horizon_days=3)
+        upload_plan(horizon_days=2)
         send_email()
         print("Correo nocturno enviado")

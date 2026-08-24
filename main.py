@@ -105,7 +105,7 @@ def save_records(source: str, kind: str, records: list[dict]) -> int:
     inserted = 0
     with db() as connection:
         for record in records:
-            external_id = str(record.get("id") or hashlib.sha256(
+            external_id = str(record.get("id") or record.get("activityId") or hashlib.sha256(
                 json.dumps(record, sort_keys=True).encode()
             ).hexdigest()[:24])
             cursor = connection.execute(
