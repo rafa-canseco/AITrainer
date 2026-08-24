@@ -241,6 +241,7 @@ def connect(source: str):
         "redirect_uri": f"{BASE_URL}/oauth/{source}/callback",
         "response_type": "code",
         "scope": scopes,
+        "approval_prompt": "force" if source == "strava" else "auto",
         "state": secrets.token_urlsafe(16),
     }
     return RedirectResponse(f"{config['authorize']}?{urlencode(params)}")
