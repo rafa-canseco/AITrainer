@@ -43,7 +43,7 @@ La conexión directa con Garmin Connect usa una API no oficial. El primer login 
 uv run python garmin_sync.py --push
 ```
 
-El comando mantiene solo los próximos días del plan, los agenda y los envía al último dispositivo Garmin. Es reanudable: `data/garmin_plan_state.json` evita repetir lo que ya terminó.
+El comando mantiene solo los próximos días del plan, los agenda y los envía al último dispositivo Garmin. Es reanudable: `data/garmin_plan_state.json` evita repetir lo que ya terminó. Las sesiones de fuerza están limitadas a menos de 50 pasos expandidos, que es el límite relevante del reloj.
 
 ## Sincronización y correo nocturno
 
