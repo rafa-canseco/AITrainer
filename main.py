@@ -13,7 +13,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import RedirectResponse
 
 DB_PATH = Path(os.getenv("TRAINER_DB_PATH", "data/trainer.db"))
-BASE_URL = os.getenv("TRAINER_BASE_URL", "http://127.0.0.1:8000")
+BASE_URL = os.getenv("TRAINER_BASE_URL", "http://localhost:8000")
 
 SOURCES = {
     "strava": {
