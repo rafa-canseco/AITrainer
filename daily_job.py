@@ -170,6 +170,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     asyncio.run(sync_sources())
     if args.night:
-        upload_plan(horizon_days=7)
+        upload_plan(horizon_days=3)
         send_email()
         print("Correo nocturno enviado")

@@ -152,7 +152,7 @@ def delete_tracked(client: Garmin, state: dict, *, all_workouts: bool = False) -
         save_state(state)
 
 
-def upload_plan(push: bool = False, horizon_days: int = 7, replace: bool = False) -> None:
+def upload_plan(push: bool = False, horizon_days: int = 3, replace: bool = False) -> None:
     client = garmin_client()
     state = load_state()
     if replace:
@@ -194,7 +194,7 @@ def upload_plan(push: bool = False, horizon_days: int = 7, replace: bool = False
 if __name__ == "__main__":
     load_dotenv()
     parser = argparse.ArgumentParser(description="Mantiene una ventana móvil del plan en Garmin Connect")
-    parser.add_argument("--days", type=int, default=7, help="Días futuros que se mantienen en Garmin")
+    parser.add_argument("--days", type=int, default=3, help="Días futuros que se mantienen en Garmin")
     parser.add_argument("--push", action="store_true", help="También envía cada workout al último dispositivo")
     parser.add_argument("--replace", action="store_true", help="Borra los workouts administrados y vuelve a crear la ventana")
     args = parser.parse_args()
