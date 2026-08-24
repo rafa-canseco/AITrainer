@@ -47,7 +47,7 @@ El comando mantiene solo los próximos días del plan, los agenda y los envía a
 
 ## Sincronización y correo nocturno
 
-El trabajo nocturno sincroniza Strava/Oura, revisa el entrenamiento ejecutado, actualiza el logro y prepara el siguiente entrenamiento. Para Gmail crea una contraseña de aplicación y agrega `GMAIL_USER`, `GMAIL_APP_PASSWORD` y `EMAIL_TO` al `.env`.
+El trabajo nocturno sincroniza Strava/Oura, revisa el entrenamiento ejecutado, actualiza el logro y prepara el siguiente entrenamiento. Para el correo usa Resend. Crea una API key y agrega `RESEND_API_KEY`, `EMAIL_FROM` y `EMAIL_TO` al `.env`. `onboarding@resend.dev` sirve para pruebas; para producción debes verificar un dominio en Resend.
 
 ```bash
 uv run python daily_job.py --night

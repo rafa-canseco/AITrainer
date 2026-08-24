@@ -2,11 +2,10 @@ import argparse
 import asyncio
 import json
 import os
-import smtplib
 import sqlite3
 from datetime import date, datetime, timedelta
-from email.message import EmailMessage
 
+import httpx
 from dotenv import load_dotenv
 
 from garmin_sync import load_workouts, upload_plan
@@ -128,11 +127,11 @@ def achievement() -> str:
 
 
 def send_email() -> None:
-    user = os.getenv("GMAIL_USER")
-    password = os.getenv("GMAIL_APP_PASSWORD")
-    recipient = os.getenv("EMAIL_TO") or user
-    if not user or not password or not recipient:
-        raise RuntimeError("Configura GMAIL_USER, GMAIL_APP_PASSWORD y EMAIL_TO en .env")
+    api_key = os.getenv("RESEND_API_KEY")
+    recipient = os.getenv("EMAIL_TO")
+    sender = os.getenv("EMAIL_FROM", "onboarding@resend.dev")
+    if not api_key or not recipient:
+        raise RuntimeError("Configura RESEND_API_KEY, EMAIL_FROM y EMAIL_TO en .env")
     sleep, sleep_advice = sleep_summary()
     workout, is_tomorrow = next_training()
     heading = "Entrenamiento de mañana" if is_tomorrow else "Mañana toca descanso; próximo entrenamiento"
@@ -144,14 +143,18 @@ def send_email() -> None:
         f"LOGRO\n{achievement()}",
         "Tu Garmin mantendrá automáticamente solo los próximos 7 días del plan.",
     ])
-    message = EmailMessage()
-    message["Subject"] = f"AI Trainer · {heading}"
-    message["From"] = user
-    message["To"] = recipient
-    message.set_content(body)
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-        smtp.login(user, password.replace(" ", ""))
-        smtp.send_message(message)
+    html = "<br>".join(
+        line.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        for line in body.splitlines()
+    )
+    response = httpx.post(
+        "https://api.resend.com/emails",
+        headers={"Authorization": f"Bearer {api_key}"},
+        json={"from": sender, "to": [recipient], "subject": f"AI Trainer · {heading}", "html": f"<pre>{html}</pre>"},
+        timeout=30,
+    )
+    response.raise_for_status()
+    print(f"Resend email: {response.json().get('id', 'ok')}")
 
 
 async def sync_sources() -> None:
