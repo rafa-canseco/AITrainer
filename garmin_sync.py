@@ -17,6 +17,11 @@ STATE_PATH = Path("data/garmin_plan_state.json")
 
 def garmin_client() -> Garmin:
     TOKEN_PATH.parent.mkdir(parents=True, exist_ok=True)
+    token_json = os.getenv("GARMIN_TOKENS")
+    if token_json:
+        client = Garmin()
+        client.login(token_json)
+        return client
     if TOKEN_PATH.exists():
         client = Garmin()
     else:

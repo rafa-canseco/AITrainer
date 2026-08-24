@@ -10,7 +10,7 @@ import httpx
 from dotenv import load_dotenv
 
 from garmin_sync import load_workouts, sync_garmin_activities, upload_plan
-from main import DB_PATH, init_db, sync_oura, sync_strava
+from main import DB_PATH, PARAM, db, init_db, sync_oura, sync_strava
 
 EXERCISE_NAMES = {
     "PUSH_UP": "lagartijas",
@@ -23,11 +23,11 @@ EXERCISE_NAMES = {
 
 
 def records(source: str, kind: str) -> list[dict]:
-    with sqlite3.connect(DB_PATH) as connection:
+    with db() as connection:
         return [
-            json.loads(row[0])
+            json.loads(row["payload"] if isinstance(row, dict) else row[0])
             for row in connection.execute(
-                "SELECT payload FROM source_records WHERE source=? AND kind=?",
+                f"SELECT payload FROM source_records WHERE source={PARAM} AND kind={PARAM}",
                 (source, kind),
             )
         ]
@@ -191,12 +191,22 @@ def send_email() -> None:
     print(f"Resend email: {response.json().get('id', 'ok')}")
 
 
-async def sync_sources() -> None:
-    strava, oura = await asyncio.gather(sync_strava(), sync_oura())
+async def safe_sync(label: str, operation):
     try:
-        garmin = await asyncio.to_thread(sync_garmin_activities)
+        return await operation()
     except Exception as error:
-        garmin = f"error: {error}"
+        return f"error: {label}: {error}"
+
+
+async def sync_sources() -> None:
+    strava, oura, garmin = await asyncio.gather(
+        safe_sync("Strava", sync_strava),
+        safe_sync("Oura", sync_oura),
+        asyncio.to_thread(sync_garmin_activities),
+        return_exceptions=True,
+    )
+    if isinstance(garmin, Exception):
+        garmin = f"error: Garmin: {garmin}"
     print(f"Sincronización: Strava +{strava}, Oura +{oura}, Garmin +{garmin}")
 
 

@@ -10,10 +10,14 @@ from pathlib import Path
 from urllib.parse import urlencode
 
 import httpx
+import psycopg
+from psycopg.rows import dict_row
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import RedirectResponse
 
 DB_PATH = Path(os.getenv("TRAINER_DB_PATH", "data/trainer.db"))
+DATABASE_URL = os.getenv("DATABASE_URL")
+PARAM = "%s" if DATABASE_URL else "?"
 BASE_URL = os.getenv("TRAINER_BASE_URL", "http://localhost:8000")
 
 SOURCES = {
@@ -32,41 +36,48 @@ SOURCES = {
 }
 
 
-def db() -> sqlite3.Connection:
+def db():
+    if DATABASE_URL:
+        return psycopg.connect(DATABASE_URL, row_factory=dict_row)
     connection = sqlite3.connect(DB_PATH)
     connection.row_factory = sqlite3.Row
     return connection
 
 
+def bootstrap_env_connections() -> None:
+    for source in SOURCES:
+        prefix = source.upper()
+        access_token = os.getenv(f"{prefix}_ACCESS_TOKEN")
+        if access_token:
+            save_connection(source, {
+                "access_token": access_token,
+                "refresh_token": os.getenv(f"{prefix}_REFRESH_TOKEN"),
+                "expires_at": os.getenv(f"{prefix}_EXPIRES_AT"),
+                "scope": os.getenv(f"{prefix}_SCOPE"),
+            })
+
+
 def init_db() -> None:
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    statements = [
+        """CREATE TABLE IF NOT EXISTS source_records (
+            source TEXT NOT NULL, kind TEXT NOT NULL, external_id TEXT NOT NULL,
+            recorded_at TEXT, payload TEXT NOT NULL,
+            fetched_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (source, kind, external_id)
+        )""",
+        """CREATE TABLE IF NOT EXISTS sync_state (
+            source TEXT PRIMARY KEY, cursor TEXT, synced_at TEXT, error TEXT
+        )""",
+        """CREATE TABLE IF NOT EXISTS connections (
+            source TEXT PRIMARY KEY, access_token TEXT NOT NULL, refresh_token TEXT,
+            expires_at INTEGER, scope TEXT
+        )""",
+    ]
     with db() as connection:
-        connection.executescript(
-            """
-            CREATE TABLE IF NOT EXISTS source_records (
-                source TEXT NOT NULL,
-                kind TEXT NOT NULL,
-                external_id TEXT NOT NULL,
-                recorded_at TEXT,
-                payload TEXT NOT NULL,
-                fetched_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY (source, kind, external_id)
-            );
-            CREATE TABLE IF NOT EXISTS sync_state (
-                source TEXT PRIMARY KEY,
-                cursor TEXT,
-                synced_at TEXT,
-                error TEXT
-            );
-            CREATE TABLE IF NOT EXISTS connections (
-                source TEXT PRIMARY KEY,
-                access_token TEXT NOT NULL,
-                refresh_token TEXT,
-                expires_at INTEGER,
-                scope TEXT
-            );
-            """
-        )
+        for statement in statements:
+            connection.execute(statement)
+    bootstrap_env_connections()
 
 
 def require_source(source: str) -> dict:
@@ -79,7 +90,7 @@ def require_source(source: str) -> dict:
 def connection_for(source: str) -> sqlite3.Row | None:
     with db() as connection:
         return connection.execute(
-            "SELECT * FROM connections WHERE source = ?", (source,)
+            f"SELECT * FROM connections WHERE source = {PARAM}", (source,)
         ).fetchone()
 
 
@@ -90,8 +101,8 @@ def save_connection(source: str, tokens: dict) -> None:
         expires_at = int(time.time()) + int(tokens["expires_in"])
     with db() as connection:
         connection.execute(
-            """INSERT INTO connections(source, access_token, refresh_token, expires_at, scope)
-               VALUES (?, ?, ?, ?, ?)
+            f"""INSERT INTO connections(source, access_token, refresh_token, expires_at, scope)
+               VALUES ({PARAM}, {PARAM}, {PARAM}, {PARAM}, {PARAM})
                ON CONFLICT(source) DO UPDATE SET access_token=excluded.access_token,
                  refresh_token=excluded.refresh_token, expires_at=excluded.expires_at,
                  scope=excluded.scope""",
@@ -109,9 +120,10 @@ def save_records(source: str, kind: str, records: list[dict]) -> int:
                 json.dumps(record, sort_keys=True).encode()
             ).hexdigest()[:24])
             cursor = connection.execute(
-                """INSERT OR IGNORE INTO source_records
+                f"""INSERT INTO source_records
                    (source, kind, external_id, recorded_at, payload)
-                   VALUES (?, ?, ?, ?, ?)""",
+                   VALUES ({PARAM}, {PARAM}, {PARAM}, {PARAM}, {PARAM})
+                   ON CONFLICT (source, kind, external_id) DO NOTHING""",
                 (source, kind, external_id,
                  record.get("start_date") or record.get("start_datetime")
                  or record.get("day") or record.get("start_date_local"),

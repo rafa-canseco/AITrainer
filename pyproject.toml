@@ -8,5 +8,6 @@ dependencies = [
     "fastapi>=0.141.1",
     "garminconnect>=0.3.11",
     "httpx>=0.28.1",
+    "psycopg[binary]>=3.3.4",
     "uvicorn[standard]>=0.52.4",
 ]
