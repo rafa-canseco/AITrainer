@@ -145,10 +145,28 @@ def strength_payload(day: dict) -> dict:
 
 
 def load_state() -> dict:
+    from main import db, init_db, PARAM
+
+    init_db()
+    with db() as connection:
+        rows = connection.execute("SELECT state_key, payload FROM plan_state").fetchall()
+    if rows:
+        return {row["state_key"] if isinstance(row, dict) else row[0]: json.loads(row["payload"] if isinstance(row, dict) else row[1]) for row in rows}
     return json.loads(STATE_PATH.read_text()) if STATE_PATH.exists() else {}
 
 
 def save_state(state: dict) -> None:
+    from main import db, init_db, PARAM
+
+    init_db()
+    with db() as connection:
+        connection.execute("DELETE FROM plan_state")
+        for key, payload in state.items():
+            connection.execute(
+                f"INSERT INTO plan_state(state_key, payload) VALUES ({PARAM}, {PARAM})",
+                (key, json.dumps(payload)),
+            )
+    STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
     STATE_PATH.write_text(json.dumps(state, indent=2) + "\n")
 
 
@@ -167,6 +185,21 @@ def delete_tracked(client: Garmin, state: dict, *, all_workouts: bool = False) -
         save_state(state)
 
 
+def existing_workouts(client: Garmin) -> dict[str, list[dict]]:
+    result: dict[str, list[dict]] = {}
+    start = 0
+    while True:
+        page = client.get_workouts(start=start, limit=100)
+        if not page:
+            break
+        for workout in page:
+            result.setdefault(workout.get("workoutName", ""), []).append(workout)
+        if len(page) < 100:
+            break
+        start += len(page)
+    return result
+
+
 def upload_plan(push: bool = False, horizon_days: int = 2, replace: bool = False) -> None:
     client = garmin_client()
     state = load_state()
@@ -178,14 +211,30 @@ def upload_plan(push: bool = False, horizon_days: int = 2, replace: bool = False
     start = date.today()
     end = start + timedelta(days=horizon_days)
     workouts = [day for day in load_workouts() if start <= date.fromisoformat(day["date"]) <= end]
+    existing = existing_workouts(client)
+    for day in workouts:
+        matches = existing.get(day["name"], [])
+        if len(matches) > 1:
+            keep = max(matches, key=lambda item: int(item["workoutId"]))
+            for duplicate in matches:
+                if duplicate["workoutId"] != keep["workoutId"]:
+                    try:
+                        client.delete_workout(duplicate["workoutId"])
+                    except Exception as error:
+                        print(f"AVISO duplicado {duplicate['workoutId']}: {error}")
+            existing[day["name"]] = [keep]
 
     for day in workouts:
         key = f"{day['date']} {day['name']}"
         item = state.setdefault(key, {"date": day["date"], "type": day["type"]})
         if "workout_id" not in item:
-            payload = running_payload(day) if day["type"] == "run" else strength_payload(day)
-            uploaded = client.upload_workout(payload)
-            item["workout_id"] = uploaded["workoutId"]
+            matches = existing.get(day["name"], [])
+            if matches:
+                item["workout_id"] = max(matches, key=lambda value: int(value["workoutId"]))["workoutId"]
+            else:
+                payload = running_payload(day) if day["type"] == "run" else strength_payload(day)
+                uploaded = client.upload_workout(payload)
+                item["workout_id"] = uploaded["workoutId"]
             save_state(state)
 
         if not item.get("scheduled"):

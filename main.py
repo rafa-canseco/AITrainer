@@ -73,6 +73,9 @@ def init_db() -> None:
             source TEXT PRIMARY KEY, access_token TEXT NOT NULL, refresh_token TEXT,
             expires_at INTEGER, scope TEXT
         )""",
+        """CREATE TABLE IF NOT EXISTS plan_state (
+            state_key TEXT PRIMARY KEY, payload TEXT NOT NULL
+        )""", 
     ]
     with db() as connection:
         for statement in statements:
