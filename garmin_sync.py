@@ -124,8 +124,13 @@ def upload_plan(push: bool) -> None:
             save_state(state)
 
         if push and not item.get("pushed"):
-            client.push_workout_to_device(item["workout_id"])
-            item["pushed"] = True
+            try:
+                client.push_workout_to_device(item["workout_id"])
+                item["pushed"] = True
+                item.pop("push_error", None)
+            except Exception as error:
+                item["push_error"] = str(error)
+                print(f"AVISO: no se pudo empujar al reloj; queda agendado: {error}")
             save_state(state)
 
         print(f"OK {day['date']} {day['name']} (Garmin {item['workout_id']})")
