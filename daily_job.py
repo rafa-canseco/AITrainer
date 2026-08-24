@@ -92,6 +92,29 @@ def training_summary(day: dict | None) -> str:
     ])
 
 
+def today_status() -> str:
+    today = date.today().isoformat()
+    planned = next((item for item in load_workouts() if item["date"] == today), None)
+    if not planned:
+        return "Hoy no había una sesión programada."
+    completed = False
+    if planned["type"] == "run":
+        completed = any(
+            item.get("sport_type") in ("Run", "VirtualRun")
+            and item.get("start_date", "")[:10] == today
+            for item in records("strava", "activity")
+        )
+    else:
+        completed = any(
+            (item.get("startTimeLocal") or item.get("startLocal") or "")[:10] == today
+            and "strength" in json.dumps(item).lower()
+            for item in records("garmin", "activity")
+        )
+    if completed:
+        return f"✅ Completaste: {planned['name']}. Se actualizó tu progreso."
+    return f"⏸️ No aparece completado: {planned['name']}. No se penaliza ni se duplica la carga; mañana continúa el siguiente paso del plan."
+
+
 def next_training() -> tuple[dict | None, bool]:
     tomorrow = date.today() + timedelta(days=1)
     future = [item for item in load_workouts() if date.fromisoformat(item["date"]) >= tomorrow]
@@ -154,11 +177,13 @@ def send_email() -> None:
     heading = "Entrenamiento de mañana" if is_tomorrow else "Mañana toca descanso; próximo entrenamiento"
     workout_text = training_summary(workout)
     achievement_text = achievement()
+    status_text = today_status()
     body = "\n\n".join([
         "AI Trainer · Preparación nocturna",
         f"Hola, Rafa! 👋\n\nCómo dormiste\n{sleep}",
         f"Cómo dormir hoy\n{sleep_advice}",
         f"{heading}\n{workout_text}",
+        f"Resumen del entrenamiento\n{status_text}",
         f"Logro\n{achievement_text}",
         "Recuerda sincronizar tu Forerunner 965 esta noche para recibir el entrenamiento.",
         "Garmin mantendrá automáticamente solo los próximos 3 entrenamientos.",
@@ -176,6 +201,7 @@ def send_email() -> None:
         {card('🌙', 'Cómo dormiste', sleep, '#eef8f4')}
         {card('🛌', 'Cómo dormir hoy', sleep_advice, '#f4f0ff')}
         {card('🏃‍♂️' if workout and workout['type'] == 'run' else '💪', heading, workout_text, '#fff5df')}
+        {card('📊', 'Resumen del entrenamiento', status_text, '#eef4ff')}
         {card('🏆', 'Tu logro', achievement_text, '#eaf3ff')}
         {card('⌚', 'Recordatorio', 'Sincroniza tu Forerunner 965 esta noche para recibir el entrenamiento de mañana.', '#fff0f0')}
         <p style="font-size:13px;line-height:1.5;color:#65727d;margin:22px 4px 0;">Tu plan se sincroniza automáticamente y Garmin conserva solo los próximos 3 entrenamientos.</p>
