@@ -1,0 +1,11 @@
+[project]
+name = "trainer"
+version = "0.1.0"
+description = "Asistente personal de entrenamiento con datos de Strava, Garmin y Oura"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.141.1",
+    "httpx>=0.28.1",
+    "uvicorn[standard]>=0.52.4",
+]
