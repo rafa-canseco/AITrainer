@@ -174,6 +174,15 @@ async def lifespan(_: FastAPI):
 app = FastAPI(title="Trainer", lifespan=lifespan)
 
 
+@app.get("/")
+def index() -> dict[str, object]:
+    return {
+        "status": "ok",
+        "connect": {source: f"/connect/{source}" for source in SOURCES},
+        "sync": "/sync",
+    }
+
+
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
