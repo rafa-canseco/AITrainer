@@ -92,17 +92,22 @@ def training_summary(day: dict | None) -> str:
     ])
 
 
-def today_status() -> str:
-    today = date.today().isoformat()
+def today_status(target_day: date | None = None) -> str:
+    target_day = target_day or date.today()
+    today = target_day.isoformat()
     planned = next((item for item in load_workouts() if item["date"] == today), None)
     if not planned:
-        return "Hoy no había una sesión programada."
+        return "No había una sesión programada."
     completed = False
     if planned["type"] == "run":
         completed = any(
             item.get("sport_type") in ("Run", "VirtualRun")
-            and item.get("start_date", "")[:10] == today
+            and activity_day(item) == today
             for item in records("strava", "activity")
+        ) or any(
+            (item.get("activityType") or {}).get("typeKey") == "running"
+            and activity_day(item) == today
+            for item in records("garmin", "activity")
         )
     else:
         completed = any(
@@ -112,7 +117,7 @@ def today_status() -> str:
         )
     if completed:
         return f"✅ Completaste: {planned['name']}. Se actualizó tu progreso."
-    return f"⏸️ No aparece completado: {planned['name']}. No se penaliza ni se duplica la carga; mañana continúa el siguiente paso del plan."
+    return f"⏸️ No aparece completado: {planned['name']}. No se penaliza ni se duplica la carga; el plan continúa con el siguiente paso."
 
 
 def activity_day(item: dict) -> str:
@@ -120,18 +125,17 @@ def activity_day(item: dict) -> str:
             or item.get("startLocal") or item.get("start_datetime") or "")[:10]
 
 
-def daily_activity_summary() -> str:
-    today = date.today().isoformat()
+def daily_activity_summary(target_day: date | None = None) -> str:
+    today = (target_day or date.today()).isoformat()
     daily = [item for item in records("oura", "daily_activity") if item.get("day") == today]
-    if not daily:
-        return "Oura todavía no tiene el resumen de actividad de hoy."
-    activity = max(daily, key=lambda item: item.get("timestamp", ""))
-    steps = activity.get("steps", 0)
-    target = activity.get("target_meters")
-    target_text = f" / meta Oura {target:,}" if isinstance(target, (int, float)) else ""
-    calories = activity.get("total_calories")
+    activity = max(daily, key=lambda item: item.get("timestamp", "")) if daily else None
+    garmin_daily = [
+        item for item in records("garmin", "daily_summary")
+        if item.get("calendarDate") == today
+    ]
+    garmin_summary = max(garmin_daily, key=lambda item: item.get("_fetched_at", "")) if garmin_daily else None
 
-    # Oura is primary. Garmin only fills activities that Oura did not report.
+    # Oura is primary. Garmin supplies today's partial summary and missing activities.
     seen = set()
     activities = []
     for item in records("oura", "workout"):
@@ -152,22 +156,35 @@ def daily_activity_summary() -> str:
         if key not in seen:
             activities.append((name, kcal))
             seen.add(key)
-    lines = [f"Pasos: {steps:,}{target_text} · {'✅ cumplida' if target and steps >= target else '⏸️ pendiente'}"]
-    if calories is not None:
-        lines.append(f"Calorías totales quemadas: {float(calories):,.0f} kcal")
+    if activity:
+        steps = activity.get("steps", 0)
+        target = activity.get("target_meters")
+        target_text = f" / meta Oura {target:,}" if isinstance(target, (int, float)) else ""
+        lines = [f"Pasos: {steps:,}{target_text} · {'✅ cumplida' if target and steps >= target else '⏸️ pendiente'}"]
+        if (calories := activity.get("total_calories")) is not None:
+            lines.append(f"Calorías totales quemadas: {float(calories):,.0f} kcal")
+    elif garmin_summary:
+        steps = garmin_summary.get("totalSteps", 0)
+        target = garmin_summary.get("dailyStepGoal")
+        target_text = f" / meta Garmin {target:,}" if isinstance(target, (int, float)) else ""
+        lines = [f"Pasos al corte: {steps:,}{target_text} · {'✅ cumplida' if target and steps >= target else '⏸️ pendiente'}"]
+        if (calories := garmin_summary.get("totalKilocalories")) is not None:
+            lines.append(f"Calorías al corte: {float(calories):,.0f} kcal")
+    else:
+        lines = ["Garmin y Oura todavía no tienen el resumen de actividad de ese día."]
     lines.append("Actividades: " + (", ".join(
         f"{name}" + (f" ({float(kcal):,.0f} kcal)" if kcal is not None else "")
         for name, kcal in activities
     ) if activities else "ninguna registrada aparte de los pasos."))
-    return "\\n".join(lines)
+    return "\n".join(lines)
 
 
-def next_training() -> tuple[dict | None, bool]:
-    tomorrow = date.today() + timedelta(days=1)
-    future = [item for item in load_workouts() if date.fromisoformat(item["date"]) >= tomorrow]
+def next_training(start_day: date | None = None) -> tuple[dict | None, bool]:
+    start_day = start_day or date.today()
+    future = [item for item in load_workouts() if date.fromisoformat(item["date"]) >= start_day]
     if not future:
         return None, False
-    return future[0], future[0]["date"] == tomorrow.isoformat()
+    return future[0], future[0]["date"] == start_day.isoformat()
 
 
 def training_streak() -> int:
@@ -213,54 +230,62 @@ def achievement() -> str:
     return f"Progreso: completaste {week_count} carrera(s) en los últimos 7 días. Racha actual: {streak} día(s). La siguiente meta es sostener 3 por semana."
 
 
-def send_email() -> None:
+def send_email(report: str) -> None:
     api_key = os.getenv("RESEND_API_KEY")
     recipient = os.getenv("EMAIL_TO")
     sender = os.getenv("EMAIL_FROM", "onboarding@resend.dev")
     if not api_key or not recipient:
         raise RuntimeError("Configura RESEND_API_KEY, EMAIL_FROM y EMAIL_TO en .env")
-    sleep, sleep_advice = sleep_summary()
-    workout, is_tomorrow = next_training()
-    heading = "Entrenamiento de mañana" if is_tomorrow else "Mañana toca descanso; próximo entrenamiento"
-    workout_text = training_summary(workout)
-    achievement_text = achievement()
-    status_text = today_status()
-    activity_text = daily_activity_summary()
-    body = "\n\n".join([
-        "AI Trainer · Preparación nocturna",
-        f"Hola, Rafa! 👋\n\nCómo dormiste\n{sleep}",
-        f"Cómo dormir hoy\n{sleep_advice}",
-        f"{heading}\n{workout_text}",
-        f"Resumen del entrenamiento\n{status_text}",
-        f"Actividad del día\n{activity_text}",
-        f"Logro\n{achievement_text}",
-        "Recuerda sincronizar tu Forerunner 965 esta noche para recibir el entrenamiento.",
-        "Garmin mantendrá automáticamente solo los próximos 3 entrenamientos.",
-    ])
+
     def card(emoji: str, title: str, content: str, color: str) -> str:
         return f'''<section style="background:{color};border-radius:16px;padding:20px 22px;margin:14px 0;">
           <div style="font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#53606b;">{emoji} {html.escape(title)}</div>
           <div style="font-size:16px;line-height:1.65;white-space:pre-line;margin-top:8px;color:#18212b;">{html.escape(content)}</div>
         </section>'''
+
+    if report == "training":
+        workout, is_tomorrow = next_training(date.today() + timedelta(days=1))
+        heading = "Entrenamiento de mañana" if is_tomorrow else "Mañana toca descanso; próximo entrenamiento"
+        workout_text = training_summary(workout)
+        subject = heading
+        eyebrow = "Preparación nocturna"
+        intro = "Tu entrenamiento ya está listo para mañana."
+        sections = [card('🏃‍♂️' if workout and workout['type'] == 'run' else '💪', heading, workout_text, '#fff5df')]
+        body_parts = [heading, workout_text]
+    else:
+        yesterday = date.today() - timedelta(days=1)
+        sleep, sleep_advice = sleep_summary()
+        status_text = today_status(yesterday)
+        activity_text = daily_activity_summary(yesterday)
+        achievement_text = achievement()
+        subject = "Sueño y resumen de ayer"
+        eyebrow = "Resumen diario"
+        intro = "Tu sueño y la actividad completa de ayer."
+        sections = [
+            card('🌙', 'Cómo dormiste', sleep, '#eef8f4'),
+            card('🛌', 'Cómo dormir hoy', sleep_advice, '#f4f0ff'),
+            card('📊', 'Entrenamiento de ayer', status_text, '#eef4ff'),
+            card('🚶', 'Actividad de ayer', activity_text, '#eef8f4'),
+            card('🏆', 'Tu logro', achievement_text, '#eaf3ff'),
+        ]
+        body_parts = [f"Cómo dormiste\n{sleep}", f"Cómo dormir hoy\n{sleep_advice}",
+                      f"Entrenamiento de ayer\n{status_text}", f"Actividad de ayer\n{activity_text}",
+                      f"Logro\n{achievement_text}"]
+
+    body = "\n\n".join([f"AI Trainer · {eyebrow}", "Hola, Rafa! 👋", *body_parts])
     html_body = f'''<div style="margin:0;background:#f4f7f8;padding:24px 12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#18212b;">
       <main style="max-width:620px;margin:auto;background:#ffffff;border-radius:22px;padding:26px;box-shadow:0 5px 24px #17212b14;">
-        <div style="font-size:13px;color:#65727d;letter-spacing:.08em;text-transform:uppercase;">AI Trainer · preparación nocturna</div>
+        <div style="font-size:13px;color:#65727d;letter-spacing:.08em;text-transform:uppercase;">AI Trainer · {html.escape(eyebrow)}</div>
         <h1 style="font-size:28px;line-height:1.2;margin:10px 0 4px;">Hola, Rafa! 👋</h1>
-        <p style="margin:0 0 18px;color:#65727d;font-size:15px;">Un vistazo a tu recuperación y a lo que toca mañana.</p>
-        {card('🌙', 'Cómo dormiste', sleep, '#eef8f4')}
-        {card('🛌', 'Cómo dormir hoy', sleep_advice, '#f4f0ff')}
-        {card('🏃‍♂️' if workout and workout['type'] == 'run' else '💪', heading, workout_text, '#fff5df')}
-        {card('📊', 'Resumen del entrenamiento', status_text, '#eef4ff')}
-        {card('🚶', 'Actividad del día', activity_text, '#eef8f4')}
-        {card('🏆', 'Tu logro', achievement_text, '#eaf3ff')}
-        {card('⌚', 'Recordatorio', 'Sincroniza tu Forerunner 965 esta noche para recibir el entrenamiento de mañana.', '#fff0f0')}
-        <p style="font-size:13px;line-height:1.5;color:#65727d;margin:22px 4px 0;">Tu plan se sincroniza automáticamente y Garmin conserva solo los próximos 3 entrenamientos.</p>
+        <p style="margin:0 0 18px;color:#65727d;font-size:15px;">{html.escape(intro)}</p>
+        {''.join(sections)}
+        <p style="font-size:13px;line-height:1.5;color:#65727d;margin:22px 4px 0;">Garmin conserva automáticamente los próximos 3 entrenamientos.</p>
       </main>
     </div>'''
     response = httpx.post(
         "https://api.resend.com/emails",
         headers={"Authorization": f"Bearer {api_key}"},
-        json={"from": sender, "to": [recipient], "subject": f"AI Trainer · {heading}", "html": html_body, "text": body},
+        json={"from": sender, "to": [recipient], "subject": f"AI Trainer · {subject}", "html": html_body, "text": body},
         timeout=30,
     )
     response.raise_for_status()
@@ -290,10 +315,15 @@ if __name__ == "__main__":
     load_dotenv()
     init_db()
     parser = argparse.ArgumentParser()
-    parser.add_argument("--night", action="store_true", help="Mantiene Garmin y envía el correo nocturno")
+    emails = parser.add_mutually_exclusive_group()
+    emails.add_argument("--training-email", action="store_true", help="Envía el entrenamiento de mañana")
+    emails.add_argument("--summary-email", action="store_true", help="Envía sueño y resumen de ayer")
     args = parser.parse_args()
     asyncio.run(sync_sources())
-    if args.night:
+    if args.training_email:
         upload_plan(horizon_days=2)
-        send_email()
-        print("Correo nocturno enviado")
+        send_email("training")
+        print("Correo de entrenamiento enviado")
+    elif args.summary_email:
+        send_email("summary")
+        print("Correo de resumen enviado")

@@ -174,6 +174,10 @@ async def fetch_json(source: str, url: str, **params) -> dict | list:
 
 
 async def sync_strava() -> int:
+    connection = connection_for("strava")
+    scopes = set((connection["scope"] or "").replace(",", " ").split()) if connection else set()
+    if not scopes.intersection({"activity:read", "activity:read_all"}):
+        return 0
     total = 0
     page = 1
     while True:

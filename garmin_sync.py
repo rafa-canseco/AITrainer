@@ -2,7 +2,7 @@ import argparse
 import getpass
 import json
 import os
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -97,7 +97,13 @@ def sync_garmin_activities(days: int = 3) -> int:
     end = date.today()
     start = end - timedelta(days=days)
     activities = client.get_activities_by_date(start.isoformat(), end.isoformat())
-    return save_records("garmin", "activity", activities)
+    summaries = []
+    for summary_day in (end - timedelta(days=1), end):
+        summary = client.get_user_summary(summary_day.isoformat())
+        summary["_fetched_at"] = datetime.now().astimezone().isoformat()
+        summaries.append(summary)
+    return (save_records("garmin", "activity", activities)
+            + save_records("garmin", "daily_summary", summaries))
 
 
 def load_workouts() -> list[dict]:

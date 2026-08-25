@@ -45,18 +45,19 @@ uv run python garmin_sync.py --push
 
 El comando mantiene solo los próximos 3 entrenamientos del plan, los agenda y los envía al último dispositivo Garmin. Es reanudable: `data/garmin_plan_state.json` evita repetir lo que ya terminó. Las sesiones de fuerza están limitadas a menos de 50 pasos expandidos, que es el límite relevante del reloj.
 
-## Sincronización y correo nocturno
+## Sincronización y correos diarios
 
-El trabajo nocturno sincroniza Strava/Oura, revisa el entrenamiento ejecutado, actualiza el logro y prepara el siguiente entrenamiento. Para el correo usa Resend. Crea una API key y agrega `RESEND_API_KEY`, `EMAIL_FROM` y `EMAIL_TO` al `.env`. `onboarding@resend.dev` sirve para pruebas; para producción debes verificar un dominio en Resend.
+A las 21:00 se sincronizan Garmin/Oura, se prepara el plan y se envía el entrenamiento de mañana. A las 12:00 se vuelven a sincronizar las fuentes y se envían el sueño y la actividad completa de ayer. Para el correo usa Resend. Crea una API key y agrega `RESEND_API_KEY`, `EMAIL_FROM` y `EMAIL_TO` al `.env`. `onboarding@resend.dev` sirve para pruebas; para producción debes verificar un dominio en Resend.
 
 ```bash
-uv run python daily_job.py --night
+uv run python daily_job.py --training-email
+uv run python daily_job.py --summary-email
 ```
 
-Para instalar dos ejecuciones diarias en macOS (mañana y 21:00):
+Para instalar ambos horarios en macOS:
 
 ```bash
 uv run python install_schedule.py
 ```
 
-La hora nocturna usa la zona horaria del Mac. Configúralo en `America/Mexico_City` para que sean las 21:00 CDMX.
+Los horarios usan la zona horaria del Mac. Configúralo en `America/Mexico_City`.
