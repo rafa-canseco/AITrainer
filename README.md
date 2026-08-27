@@ -32,9 +32,9 @@ Para cambiar la ruta de la base:
 TRAINER_DB_PATH=/otra/ruta/trainer.db uv run uvicorn main:app --reload
 ```
 
-## Plan mensual y Garmin
+## Plan olímpico y Garmin
 
-El plan de cuatro semanas está en `plans/running-2026-08-25.json`. Usa zonas provisionales calculadas con FC de reposo de Oura y los máximos fiables de Strava.
+El bloque inicial de ocho semanas está en `plans/olympic-foundation-2026-08-27.json`. Combina carrera, natación, bicicleta y dos sesiones full-body con prioridad en pull-ups. Los lunes son descanso completo. Las zonas de carrera son provisionales hasta los tests de umbral.
 
 La conexión directa con Garmin Connect usa una API no oficial. El primer login requiere contraseña y, si aplica, MFA; después conserva únicamente tokens locales en `data/garmin_tokens`.
 
@@ -43,7 +43,7 @@ La conexión directa con Garmin Connect usa una API no oficial. El primer login 
 uv run python garmin_sync.py --push
 ```
 
-El comando mantiene solo los próximos 3 entrenamientos del plan, los agenda y los envía al último dispositivo Garmin. Es reanudable: `data/garmin_plan_state.json` evita repetir lo que ya terminó. Las sesiones de fuerza están limitadas a menos de 50 pasos expandidos, que es el límite relevante del reloj.
+El comando mantiene una ventana móvil de los próximos días, agenda todas las sesiones y puede enviarlas al último dispositivo Garmin. Es reanudable: `data/garmin_plan_state.json` evita repetir lo que ya terminó y reemplaza un workout administrado cuando cambia su contenido.
 
 ## Sincronización y correos diarios
 

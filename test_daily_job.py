@@ -4,6 +4,7 @@ from datetime import date, timedelta
 from unittest.mock import Mock, patch
 
 import daily_job
+import garmin_sync
 
 
 class GarminRunFallbackTest(unittest.TestCase):
@@ -63,17 +64,17 @@ class GarminRunFallbackTest(unittest.TestCase):
         self.assertIn("Calorías activas: 480 / meta 650 kcal", summary)
         self.assertNotIn("12,000", summary)
 
-    @patch.object(daily_job, "next_training")
+    @patch.object(daily_job, "next_trainings")
     @patch.object(daily_job.httpx, "post")
-    def test_training_email_only_contains_tomorrows_workout(self, post, next_training):
-        next_training.return_value = ({
+    def test_training_email_only_contains_tomorrows_workout(self, post, next_trainings):
+        next_trainings.return_value = ([{
             "date": (date.today() + timedelta(days=1)).isoformat(),
             "type": "run",
             "name": "Fácil",
             "description": "Rodaje suave",
             "steps": [],
             "zones": {},
-        }, True)
+        }], True)
         post.return_value = Mock(raise_for_status=Mock(), json=Mock(return_value={"id": "test"}))
 
         with patch.dict(os.environ, {"RESEND_API_KEY": "test", "EMAIL_TO": "rafa@example.com"}):
@@ -82,6 +83,26 @@ class GarminRunFallbackTest(unittest.TestCase):
         message = post.call_args.kwargs["json"]
         self.assertIn("Entrenamiento de mañana", message["text"])
         self.assertNotIn("Cómo dormiste", message["text"])
+
+    @patch.object(garmin_sync, "save_state")
+    def test_removed_or_legacy_workout_is_deleted(self, save_state):
+        client = Mock()
+        state = {"2026-09-01 Legacy": {"date": "2026-09-01", "workout_id": 123}}
+
+        garmin_sync.delete_tracked(client, state, valid_ids={"new-session"})
+
+        client.delete_workout.assert_called_once_with(123)
+        self.assertEqual({}, state)
+        save_state.assert_called_once_with(state)
+
+    def test_unified_plan_supports_all_sports_and_double_sessions(self):
+        workouts = garmin_sync.load_workouts()
+        self.assertEqual({"run", "bike", "swim", "strength"}, {item["type"] for item in workouts})
+        self.assertEqual(len(workouts), len({item["id"] for item in workouts}))
+        self.assertEqual(2, len([item for item in workouts if item["date"] == "2026-09-01"]))
+        for kind, sport_id in (("run", 1), ("bike", 2), ("swim", 4), ("strength", 5)):
+            workout = next(item for item in workouts if item["type"] == kind)
+            self.assertEqual(sport_id, garmin_sync.workout_payload(workout)["sportType"]["sportTypeId"])
 
 
 if __name__ == "__main__":

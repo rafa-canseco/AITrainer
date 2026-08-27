@@ -18,7 +18,13 @@ EXERCISE_NAMES = {
     "HANGING_KNEE_RAISE": "abdominales colgado",
     "PULL_UP": "pull-ups",
     "RING_ROW": "remo en aros",
-    "BODY_WEIGHT_DIP": "dips",
+    "BODY_WEIGHT_DIP": "dips asistidos con rango completo",
+    "AIR_SQUAT": "sentadillas",
+    "REVERSE_LUNGE_WITH_REACH_BACK": "zancadas hacia atrás por pierna",
+    "SINGLE_LEG_HIP_RAISE": "puente de glúteo por pierna",
+    "STANDING_CALF_RAISE": "elevaciones de pantorrilla",
+    "DEAD_BUG": "dead bug por lado",
+    "SIDE_PLANK": "plancha lateral por lado",
 }
 
 
@@ -64,60 +70,62 @@ def format_steps(steps: list[dict], zones: dict[str, list[int]], indent: str = "
             lines.append(f"{indent}{step['times']} rondas:")
             lines.extend(format_steps(step["steps"], zones, indent + "  "))
             continue
-        duration = f"{step['meters'] / 1000:g} km" if "meters" in step else f"{step['seconds'] // 60:g} min"
+        if "meters" in step:
+            duration = f"{step['meters']:g} m" if step["meters"] < 1000 else f"{step['meters'] / 1000:g} km"
+        else:
+            seconds = step["seconds"]
+            duration = f"{seconds // 60:g} min" if seconds % 60 == 0 else f"{seconds:g} s"
         zone = step.get("zone")
-        target = f" {zone} ({zones[zone][0]}–{zones[zone][1]} bpm)" if zone else " libre"
-        lines.append(f"{indent}- {step['type']}: {duration},{target}")
+        if zone:
+            target = f"{zone} ({zones[zone][0]}–{zones[zone][1]} bpm)"
+        else:
+            target = step.get("effort", "libre")
+        lines.append(f"{indent}- {step['type']}: {duration}, {target}")
     return lines
 
 
 def training_summary(day: dict | None) -> str:
     if not day:
         return "No quedan entrenamientos en el bloque actual."
-    if day["type"] == "run":
-        return "\n".join([
-            f"{day['date']} · {day['name']}",
-            day["description"],
-            *format_steps(day["steps"], day["zones"]),
-        ])
+    heading = f"{day['date']} {day.get('time', '')} · {day['name']}".replace("  ·", " ·")
+    if day["type"] != "strength":
+        return "\n".join([heading, day["description"], *format_steps(day["steps"], day["zones"])])
     exercises = [
         f"- {sets}×{reps} {EXERCISE_NAMES.get(exercise, exercise.lower())}, 90 s descanso"
         for _, exercise, sets, reps in day["exercises"]
     ]
-    return "\n".join([
-        f"{day['date']} · {day['name']} · {day['focus']}",
-        "Calienta hombros; luego 3 rondas de dead hang 30 s + 10 lagartijas.",
-        "Deja 1 repetición en reserva:",
-        *exercises,
-    ])
+    return "\n".join([heading, day["description"], "Deja 1–2 repeticiones limpias en reserva:", *exercises])
+
+
+def completed_session(planned: dict, day: str) -> bool:
+    strava_types = {
+        "run": {"Run", "VirtualRun"}, "bike": {"Ride", "VirtualRide", "MountainBikeRide"},
+        "swim": {"Swim"},
+    }
+    garmin_types = {
+        "run": {"running"}, "bike": {"cycling", "road_biking", "indoor_cycling"},
+        "swim": {"lap_swimming", "open_water_swimming", "swimming"}, "strength": {"strength_training"},
+    }
+    return any(
+        activity_day(item) == day and item.get("sport_type") in strava_types.get(planned["type"], set())
+        for item in records("strava", "activity")
+    ) or any(
+        activity_day(item) == day
+        and (item.get("activityType") or {}).get("typeKey") in garmin_types[planned["type"]]
+        for item in records("garmin", "activity")
+    )
 
 
 def today_status(target_day: date | None = None) -> str:
-    target_day = target_day or date.today()
-    today = target_day.isoformat()
-    planned = next((item for item in load_workouts() if item["date"] == today), None)
+    day = (target_day or date.today()).isoformat()
+    planned = [item for item in load_workouts() if item["date"] == day]
     if not planned:
         return "No había una sesión programada."
-    completed = False
-    if planned["type"] == "run":
-        completed = any(
-            item.get("sport_type") in ("Run", "VirtualRun")
-            and activity_day(item) == today
-            for item in records("strava", "activity")
-        ) or any(
-            (item.get("activityType") or {}).get("typeKey") == "running"
-            and activity_day(item) == today
-            for item in records("garmin", "activity")
-        )
-    else:
-        completed = any(
-            (item.get("startTimeLocal") or item.get("startLocal") or "")[:10] == today
-            and "strength" in json.dumps(item).lower()
-            for item in records("garmin", "activity")
-        )
-    if completed:
-        return f"✅ Completaste: {planned['name']}. Se actualizó tu progreso."
-    return f"⏸️ No aparece completado: {planned['name']}. No se penaliza ni se duplica la carga; el plan continúa con el siguiente paso."
+    return "\n".join(
+        f"✅ Completaste: {item['name']}." if completed_session(item, day)
+        else f"⏸️ No aparece completado: {item['name']}."
+        for item in planned
+    )
 
 
 def activity_day(item: dict) -> str:
@@ -184,12 +192,13 @@ def daily_activity_summary(target_day: date | None = None) -> str:
     return "\n".join(lines)
 
 
-def next_training(start_day: date | None = None) -> tuple[dict | None, bool]:
+def next_trainings(start_day: date | None = None) -> tuple[list[dict], bool]:
     start_day = start_day or date.today()
     future = [item for item in load_workouts() if date.fromisoformat(item["date"]) >= start_day]
     if not future:
-        return None, False
-    return future[0], future[0]["date"] == start_day.isoformat()
+        return [], False
+    next_date = future[0]["date"]
+    return [item for item in future if item["date"] == next_date], next_date == start_day.isoformat()
 
 
 def training_streak() -> int:
@@ -209,15 +218,24 @@ def training_streak() -> int:
 
 def achievement() -> str:
     streak = training_streak()
-    runs = []
+    unique = {}
     for item in records("strava", "activity"):
         if item.get("sport_type") not in ("Run", "VirtualRun") or not item.get("moving_time"):
             continue
         activity_date = datetime.fromisoformat(item["start_date"].replace("Z", "+00:00")).date()
-        runs.append((activity_date, item))
+        unique[(activity_date, round(item["distance"] / 100))] = (activity_date, item)
+    for item in records("garmin", "activity"):
+        if (item.get("activityType") or {}).get("typeKey") != "running" or not item.get("distance"):
+            continue
+        raw_day = activity_day(item)
+        if not raw_day:
+            continue
+        activity_date = date.fromisoformat(raw_day)
+        normalized = {"distance": item["distance"], "moving_time": item.get("movingDuration") or item.get("duration")}
+        unique[(activity_date, round(item["distance"] / 100))] = (activity_date, normalized)
+    runs = sorted(unique.values(), key=lambda pair: pair[0])
     if not runs:
         return "Primer objetivo: completar tres sesiones consistentes esta semana."
-    runs.sort(key=lambda pair: pair[0])
     latest_date, latest = runs[-1]
     latest_distance = latest["distance"] / 1000
     latest_pace = latest["moving_time"] / latest_distance / 60
@@ -249,14 +267,18 @@ def send_email(report: str) -> None:
         </section>'''
 
     if report == "training":
-        workout, is_tomorrow = next_training(date.today() + timedelta(days=1))
-        heading = "Entrenamiento de mañana" if is_tomorrow else "Mañana toca descanso; próximo entrenamiento"
-        workout_text = training_summary(workout)
+        workouts, is_tomorrow = next_trainings(date.today() + timedelta(days=1))
+        heading = ("Entrenamiento" if len(workouts) == 1 else "Entrenamientos") + " de mañana" if is_tomorrow else "Mañana toca descanso; próximo entrenamiento"
+        workout_texts = [training_summary(workout) for workout in workouts]
         subject = heading
         eyebrow = "Preparación nocturna"
-        intro = "Tu entrenamiento ya está listo para mañana."
-        sections = [card('🏃‍♂️' if workout and workout['type'] == 'run' else '💪', heading, workout_text, '#fff5df')]
-        body_parts = [heading, workout_text]
+        intro = "Tu plan ya está listo para mañana."
+        icons = {"run": "🏃‍♂️", "bike": "🚴", "swim": "🏊", "strength": "💪"}
+        sections = [
+            card(icons[workout["type"]], workout["name"], text, '#fff5df')
+            for workout, text in zip(workouts, workout_texts)
+        ] or [card("😴", heading, "Descanso programado.", "#eef4ff")]
+        body_parts = [heading, *(workout_texts or ["Descanso programado."])]
     else:
         yesterday = date.today() - timedelta(days=1)
         sleep, sleep_advice = sleep_summary()
@@ -284,7 +306,7 @@ def send_email(report: str) -> None:
         <h1 style="font-size:28px;line-height:1.2;margin:10px 0 4px;">Hola, Rafa! 👋</h1>
         <p style="margin:0 0 18px;color:#65727d;font-size:15px;">{html.escape(intro)}</p>
         {''.join(sections)}
-        <p style="font-size:13px;line-height:1.5;color:#65727d;margin:22px 4px 0;">Garmin conserva automáticamente los próximos 3 entrenamientos.</p>
+        <p style="font-size:13px;line-height:1.5;color:#65727d;margin:22px 4px 0;">Garmin mantiene automáticamente los entrenamientos de los próximos días.</p>
       </main>
     </div>'''
     response = httpx.post(

@@ -1,0 +1,2617 @@
+{
+  "name": "Fundación triatlón olímpico · 8 semanas",
+  "start_date": "2026-08-26",
+  "end_date": "2026-10-25",
+  "objective": "Construir frecuencia multideporte para terminar fuerte un triatlón olímpico en 6–8 meses, preservando progreso de pull-ups.",
+  "athlete": {
+    "age": 35,
+    "height_cm": 178,
+    "starting_weight_kg": 90,
+    "first_weight_goal_kg": 84,
+    "weekly_hours_target": "8–10"
+  },
+  "run_zones": {
+    "method": "Provisionales por reserva cardiaca; FC reposo Oura ~63 y FC máxima fiable provisional 192. Recalibrar con tests del 13 de septiembre y 21 de octubre.",
+    "Z1": [
+      128,
+      140
+    ],
+    "Z2": [
+      141,
+      153
+    ],
+    "Z3": [
+      154,
+      166
+    ],
+    "Z4": [
+      167,
+      179
+    ],
+    "Z5": [
+      180,
+      192
+    ]
+  },
+  "rules": [
+    "Lunes descanso completo.",
+    "Domingo sesión clave; no recuperar sesiones perdidas el lunes.",
+    "Pérdida de peso objetivo 0.25–0.4 kg/semana; no restringir combustible alrededor de sesiones largas o tests.",
+    "Si no hay bici, sustituir por caminata o elíptica del mismo tiempo, nunca carrera extra.",
+    "Primeras 3 rodadas tras comprar la bici: 45–60 min fáciles aunque el calendario indique más.",
+    "Detener y evaluar dolor que cambie técnica, dolor torácico, desmayo, palpitaciones sintomáticas o falta de aire inusual.",
+    "Natación supervisada, sin ejercicios de apnea.",
+    "Sesiones perdidas se omiten, no se apilan."
+  ],
+  "workouts": [
+    {
+      "id": "2026-08-26-1951-run",
+      "date": "2026-08-26",
+      "time": "19:51",
+      "type": "run",
+      "name": "Base carrera fácil 45",
+      "description": "Sesión completada antes de iniciar el nuevo bloque: 4.81 km en 45:07, FC media 141 y máxima 156.",
+      "steps": [
+        {"type": "warmup", "seconds": 600, "zone": "Z1"},
+        {"type": "interval", "seconds": 1800, "zone": "Z2"},
+        {"type": "cooldown", "seconds": 300, "zone": "Z1"}
+      ]
+    },
+    {
+      "id": "2026-08-27-1830-strength",
+      "date": "2026-08-27",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Test fuerza",
+      "description": "Prueba: tras calentar, primera serie de pull-ups hasta antes de perder forma; registra repeticiones. Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          1,
+          3
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          3,
+          10
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          3,
+          8
+        ],
+        [
+          "SQUAT",
+          "AIR_SQUAT",
+          3,
+          12
+        ],
+        [
+          "HIP_RAISE",
+          "SINGLE_LEG_HIP_RAISE",
+          3,
+          10
+        ],
+        [
+          "LEG_RAISE",
+          "HANGING_KNEE_RAISE",
+          3,
+          8
+        ]
+      ],
+      "estimated_seconds": 2400,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-08-28-0600-run",
+      "date": "2026-08-28",
+      "time": "06:00",
+      "type": "run",
+      "name": "Carrera fácil",
+      "description": "Conversacional. Si calor, fatiga o pulso no coinciden, manda RPE 2–3 y no el ritmo.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 1800,
+          "zone": "Z2"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-08-30-0700-run",
+      "date": "2026-08-30",
+      "time": "07:00",
+      "type": "run",
+      "name": "Fondo fácil 75 min",
+      "description": "Z1–Z2, sin cierre rápido. Puedes caminar 30–60 s cada 10 min desde el inicio.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 3600,
+          "zone": "Z2"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-01-0600-run",
+      "date": "2026-09-01",
+      "time": "06:00",
+      "type": "run",
+      "name": "Carrera fácil",
+      "description": "Conversacional. Si calor, fatiga o pulso no coinciden, manda RPE 2–3 y no el ritmo.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 1800,
+          "zone": "Z2"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-01-1830-strength",
+      "date": "2026-09-01",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Full-body A",
+      "description": "Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          5,
+          1
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          3,
+          10
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          3,
+          8
+        ],
+        [
+          "SQUAT",
+          "AIR_SQUAT",
+          3,
+          12
+        ],
+        [
+          "HIP_RAISE",
+          "SINGLE_LEG_HIP_RAISE",
+          3,
+          10
+        ],
+        [
+          "LEG_RAISE",
+          "HANGING_KNEE_RAISE",
+          3,
+          8
+        ]
+      ],
+      "estimated_seconds": 2400,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-09-03-0600-run",
+      "date": "2026-09-03",
+      "time": "06:00",
+      "type": "run",
+      "name": "Calidad 6×2 Z3",
+      "description": "Fuerte sostenible, técnica limpia, nunca sprint. Usa pecho si tienes banda.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 900,
+          "zone": "Z2"
+        },
+        {
+          "type": "repeat",
+          "times": 6,
+          "steps": [
+            {
+              "type": "interval",
+              "seconds": 120,
+              "zone": "Z3"
+            },
+            {
+              "type": "recovery",
+              "seconds": 120,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "seconds": 660,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-04-1830-strength",
+      "date": "2026-09-04",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Full-body B",
+      "description": "Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          4,
+          1
+        ],
+        [
+          "TRICEPS_EXTENSION",
+          "BODY_WEIGHT_DIP",
+          3,
+          4
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          2,
+          8
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          3,
+          10
+        ],
+        [
+          "LUNGE",
+          "REVERSE_LUNGE_WITH_REACH_BACK",
+          3,
+          8
+        ],
+        [
+          "CALF_RAISE",
+          "STANDING_CALF_RAISE",
+          3,
+          15
+        ]
+      ],
+      "estimated_seconds": 2400,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-09-06-0700-run",
+      "date": "2026-09-06",
+      "time": "07:00",
+      "type": "run",
+      "name": "Fondo fácil 80 min",
+      "description": "Z1–Z2, sin cierre rápido. Puedes caminar 30–60 s cada 10 min desde el inicio.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 3900,
+          "zone": "Z2"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-08-0600-run",
+      "date": "2026-09-08",
+      "time": "06:00",
+      "type": "run",
+      "name": "Carrera fácil",
+      "description": "Conversacional. Si calor, fatiga o pulso no coinciden, manda RPE 2–3 y no el ritmo.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 1800,
+          "zone": "Z2"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-08-1830-strength",
+      "date": "2026-09-08",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Full-body A",
+      "description": "Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          5,
+          1
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          3,
+          10
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          3,
+          8
+        ],
+        [
+          "SQUAT",
+          "AIR_SQUAT",
+          3,
+          12
+        ],
+        [
+          "HIP_RAISE",
+          "SINGLE_LEG_HIP_RAISE",
+          3,
+          10
+        ],
+        [
+          "LEG_RAISE",
+          "HANGING_KNEE_RAISE",
+          3,
+          8
+        ]
+      ],
+      "estimated_seconds": 2400,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-09-09-0600-swim",
+      "date": "2026-09-09",
+      "time": "06:00",
+      "type": "swim",
+      "name": "Natación S1 · 800 m",
+      "description": "Alberca de 25 m. Prioriza respiración tranquila y forma; descansa en pared. Sin apnea ni palas.",
+      "steps": [
+        {
+          "type": "warmup",
+          "meters": 200,
+          "effort": "fácil"
+        },
+        {
+          "type": "repeat",
+          "times": 8,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "técnica"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 6,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 50,
+              "effort": "fácil"
+            },
+            {
+              "type": "recovery",
+              "seconds": 25
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "meters": 100,
+          "effort": "fácil"
+        }
+      ],
+      "estimated_seconds": 2400
+    },
+    {
+      "id": "2026-09-10-0600-run",
+      "date": "2026-09-10",
+      "time": "06:00",
+      "type": "run",
+      "name": "Tempo 3×6 Z3",
+      "description": "Fuerte sostenible, técnica limpia, nunca sprint. Usa pecho si tienes banda.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 900,
+          "zone": "Z2"
+        },
+        {
+          "type": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "type": "interval",
+              "seconds": 360,
+              "zone": "Z3"
+            },
+            {
+              "type": "recovery",
+              "seconds": 180,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "seconds": 480,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-11-0600-swim",
+      "date": "2026-09-11",
+      "time": "06:00",
+      "type": "swim",
+      "name": "Natación S2 · 850 m",
+      "description": "Alberca de 25 m. Prioriza respiración tranquila y forma; descansa en pared. Sin apnea ni palas.",
+      "steps": [
+        {
+          "type": "warmup",
+          "meters": 200,
+          "effort": "fácil"
+        },
+        {
+          "type": "repeat",
+          "times": 6,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "técnica"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 6,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 50,
+              "effort": "fácil"
+            },
+            {
+              "type": "recovery",
+              "seconds": 25
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "progresivo relajado"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "meters": 100,
+          "effort": "fácil"
+        }
+      ],
+      "estimated_seconds": 2400
+    },
+    {
+      "id": "2026-09-11-1830-strength",
+      "date": "2026-09-11",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Full-body B",
+      "description": "Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          4,
+          1
+        ],
+        [
+          "TRICEPS_EXTENSION",
+          "BODY_WEIGHT_DIP",
+          3,
+          4
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          2,
+          8
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          3,
+          10
+        ],
+        [
+          "LUNGE",
+          "REVERSE_LUNGE_WITH_REACH_BACK",
+          3,
+          8
+        ],
+        [
+          "CALF_RAISE",
+          "STANDING_CALF_RAISE",
+          3,
+          15
+        ]
+      ],
+      "estimated_seconds": 2400,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-09-13-0700-run",
+      "date": "2026-09-13",
+      "time": "07:00",
+      "type": "run",
+      "name": "Test umbral carrera 30 min",
+      "description": "15 min fácil; 30 min al máximo esfuerzo uniforme sostenible; 10–15 min fácil. Guarda distancia, ritmo y FC media de los últimos 20 min.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 900,
+          "zone": "Z2"
+        },
+        {
+          "type": "interval",
+          "seconds": 1800,
+          "effort": "máximo sostenible uniforme"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 600,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-15-0600-swim",
+      "date": "2026-09-15",
+      "time": "06:00",
+      "type": "swim",
+      "name": "Natación S3 · 900 m",
+      "description": "Alberca de 25 m. Prioriza respiración tranquila y forma; descansa en pared. Sin apnea ni palas.",
+      "steps": [
+        {
+          "type": "warmup",
+          "meters": 200,
+          "effort": "fácil"
+        },
+        {
+          "type": "repeat",
+          "times": 8,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "técnica"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 6,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 50,
+              "effort": "fácil"
+            },
+            {
+              "type": "recovery",
+              "seconds": 25
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "progresivo relajado"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "meters": 100,
+          "effort": "fácil"
+        }
+      ],
+      "estimated_seconds": 2400
+    },
+    {
+      "id": "2026-09-15-1830-strength",
+      "date": "2026-09-15",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Full-body A reducido",
+      "description": "Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          2,
+          1
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          2,
+          10
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          2,
+          8
+        ],
+        [
+          "SQUAT",
+          "AIR_SQUAT",
+          2,
+          12
+        ],
+        [
+          "HIP_RAISE",
+          "SINGLE_LEG_HIP_RAISE",
+          2,
+          10
+        ],
+        [
+          "LEG_RAISE",
+          "HANGING_KNEE_RAISE",
+          2,
+          8
+        ]
+      ],
+      "estimated_seconds": 1800,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-09-16-0600-run",
+      "date": "2026-09-16",
+      "time": "06:00",
+      "type": "run",
+      "name": "Tempo 4×5 Z3",
+      "description": "Fuerte sostenible, técnica limpia, nunca sprint. Usa pecho si tienes banda.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 900,
+          "zone": "Z2"
+        },
+        {
+          "type": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "type": "interval",
+              "seconds": 300,
+              "zone": "Z3"
+            },
+            {
+              "type": "recovery",
+              "seconds": 120,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "seconds": 420,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-17-0600-bike",
+      "date": "2026-09-17",
+      "time": "06:00",
+      "type": "bike",
+      "name": "Bici fácil 50 min",
+      "description": "RPE 2–4, cadencia cómoda 80–95 rpm. Si aún no tienes bici, sustituye por caminata o elíptica del mismo tiempo; no corras extra.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "effort": "RPE 2"
+        },
+        {
+          "type": "interval",
+          "seconds": 2100,
+          "effort": "RPE 3–4"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "effort": "RPE 2"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-18-0600-swim",
+      "date": "2026-09-18",
+      "time": "06:00",
+      "type": "swim",
+      "name": "Natación S4 · 950 m",
+      "description": "Alberca de 25 m. Prioriza respiración tranquila y forma; descansa en pared. Sin apnea ni palas.",
+      "steps": [
+        {
+          "type": "warmup",
+          "meters": 200,
+          "effort": "fácil"
+        },
+        {
+          "type": "repeat",
+          "times": 8,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "técnica"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 75,
+              "effort": "fácil"
+            },
+            {
+              "type": "recovery",
+              "seconds": 30
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 6,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "relajado"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "meters": 100,
+          "effort": "fácil"
+        }
+      ],
+      "estimated_seconds": 2400
+    },
+    {
+      "id": "2026-09-18-1830-strength",
+      "date": "2026-09-18",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Full-body B reducido",
+      "description": "Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          2,
+          1
+        ],
+        [
+          "TRICEPS_EXTENSION",
+          "BODY_WEIGHT_DIP",
+          2,
+          4
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          2,
+          8
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          2,
+          10
+        ],
+        [
+          "LUNGE",
+          "REVERSE_LUNGE_WITH_REACH_BACK",
+          2,
+          8
+        ],
+        [
+          "CALF_RAISE",
+          "STANDING_CALF_RAISE",
+          2,
+          15
+        ]
+      ],
+      "estimated_seconds": 1800,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-09-19-0700-bike",
+      "date": "2026-09-19",
+      "time": "07:00",
+      "type": "bike",
+      "name": "Bici fondo 60 min",
+      "description": "RPE 2–4, cadencia cómoda 80–95 rpm. Si aún no tienes bici, sustituye por caminata o elíptica del mismo tiempo; no corras extra.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "effort": "RPE 2"
+        },
+        {
+          "type": "interval",
+          "seconds": 2700,
+          "effort": "RPE 3–4"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "effort": "RPE 2"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-19-0915-run",
+      "date": "2026-09-19",
+      "time": "09:15",
+      "type": "run",
+      "name": "Transición fácil 10 min",
+      "description": "Empieza sin prisa tras la bici: pasos cortos, 5 min Z1 y luego como máximo Z2.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 300,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 300,
+          "zone": "Z2"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-20-0700-run",
+      "date": "2026-09-20",
+      "time": "07:00",
+      "type": "run",
+      "name": "Fondo fácil 75 min",
+      "description": "Z1–Z2, sin cierre rápido. Puedes caminar 30–60 s cada 10 min desde el inicio.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 3600,
+          "zone": "Z2"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-22-0600-swim",
+      "date": "2026-09-22",
+      "time": "06:00",
+      "type": "swim",
+      "name": "Natación S5 · 1000 m",
+      "description": "Alberca de 25 m. Prioriza respiración tranquila y forma; descansa en pared. Sin apnea ni palas.",
+      "steps": [
+        {
+          "type": "warmup",
+          "meters": 200,
+          "effort": "fácil"
+        },
+        {
+          "type": "repeat",
+          "times": 8,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "técnica"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 5,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 100,
+              "effort": "fácil"
+            },
+            {
+              "type": "recovery",
+              "seconds": 30
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "meters": 100,
+          "effort": "fácil"
+        }
+      ],
+      "estimated_seconds": 3000
+    },
+    {
+      "id": "2026-09-22-1830-strength",
+      "date": "2026-09-22",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Full-body A",
+      "description": "Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          5,
+          1
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          3,
+          10
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          3,
+          8
+        ],
+        [
+          "SQUAT",
+          "AIR_SQUAT",
+          3,
+          12
+        ],
+        [
+          "HIP_RAISE",
+          "SINGLE_LEG_HIP_RAISE",
+          3,
+          10
+        ],
+        [
+          "LEG_RAISE",
+          "HANGING_KNEE_RAISE",
+          3,
+          8
+        ]
+      ],
+      "estimated_seconds": 2400,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-09-23-0600-run",
+      "date": "2026-09-23",
+      "time": "06:00",
+      "type": "run",
+      "name": "Carrera fácil",
+      "description": "Conversacional. Si calor, fatiga o pulso no coinciden, manda RPE 2–3 y no el ritmo.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 1800,
+          "zone": "Z2"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-24-0600-bike",
+      "date": "2026-09-24",
+      "time": "06:00",
+      "type": "bike",
+      "name": "Bici fácil 60 min",
+      "description": "RPE 2–4, cadencia cómoda 80–95 rpm. Si aún no tienes bici, sustituye por caminata o elíptica del mismo tiempo; no corras extra.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "effort": "RPE 2"
+        },
+        {
+          "type": "interval",
+          "seconds": 2700,
+          "effort": "RPE 3–4"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "effort": "RPE 2"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-25-0600-swim",
+      "date": "2026-09-25",
+      "time": "06:00",
+      "type": "swim",
+      "name": "Natación S6 · 1050 m",
+      "description": "Alberca de 25 m. Prioriza respiración tranquila y forma; descansa en pared. Sin apnea ni palas.",
+      "steps": [
+        {
+          "type": "warmup",
+          "meters": 200,
+          "effort": "fácil"
+        },
+        {
+          "type": "repeat",
+          "times": 6,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "técnica"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 200,
+              "effort": "fácil"
+            },
+            {
+              "type": "recovery",
+              "seconds": 45
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "meters": 100,
+          "effort": "fácil"
+        }
+      ],
+      "estimated_seconds": 3000
+    },
+    {
+      "id": "2026-09-25-1830-strength",
+      "date": "2026-09-25",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Full-body B",
+      "description": "Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          4,
+          1
+        ],
+        [
+          "TRICEPS_EXTENSION",
+          "BODY_WEIGHT_DIP",
+          3,
+          4
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          2,
+          8
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          3,
+          10
+        ],
+        [
+          "LUNGE",
+          "REVERSE_LUNGE_WITH_REACH_BACK",
+          3,
+          8
+        ],
+        [
+          "CALF_RAISE",
+          "STANDING_CALF_RAISE",
+          3,
+          15
+        ]
+      ],
+      "estimated_seconds": 2400,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-09-26-0700-bike",
+      "date": "2026-09-26",
+      "time": "07:00",
+      "type": "bike",
+      "name": "Bici fondo 75 min",
+      "description": "RPE 2–4, cadencia cómoda 80–95 rpm. Si aún no tienes bici, sustituye por caminata o elíptica del mismo tiempo; no corras extra.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "effort": "RPE 2"
+        },
+        {
+          "type": "interval",
+          "seconds": 3600,
+          "effort": "RPE 3–4"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "effort": "RPE 2"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-26-0915-run",
+      "date": "2026-09-26",
+      "time": "09:15",
+      "type": "run",
+      "name": "Transición fácil 10 min",
+      "description": "Empieza sin prisa tras la bici: pasos cortos, 5 min Z1 y luego como máximo Z2.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 300,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 300,
+          "zone": "Z2"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-27-0700-run",
+      "date": "2026-09-27",
+      "time": "07:00",
+      "type": "run",
+      "name": "Fondo fácil 80 min",
+      "description": "Z1–Z2, sin cierre rápido. Puedes caminar 30–60 s cada 10 min desde el inicio.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 3900,
+          "zone": "Z2"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-09-29-0600-swim",
+      "date": "2026-09-29",
+      "time": "06:00",
+      "type": "swim",
+      "name": "Natación S7 · 1100 m",
+      "description": "Alberca de 25 m. Prioriza respiración tranquila y forma; descansa en pared. Sin apnea ni palas.",
+      "steps": [
+        {
+          "type": "warmup",
+          "meters": 200,
+          "effort": "fácil"
+        },
+        {
+          "type": "repeat",
+          "times": 8,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "técnica"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 150,
+              "effort": "fácil"
+            },
+            {
+              "type": "recovery",
+              "seconds": 35
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "meters": 100,
+          "effort": "fácil"
+        }
+      ],
+      "estimated_seconds": 3000
+    },
+    {
+      "id": "2026-09-29-1830-strength",
+      "date": "2026-09-29",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Full-body A",
+      "description": "Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          5,
+          1
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          3,
+          10
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          3,
+          8
+        ],
+        [
+          "SQUAT",
+          "AIR_SQUAT",
+          3,
+          12
+        ],
+        [
+          "HIP_RAISE",
+          "SINGLE_LEG_HIP_RAISE",
+          3,
+          10
+        ],
+        [
+          "LEG_RAISE",
+          "HANGING_KNEE_RAISE",
+          3,
+          8
+        ]
+      ],
+      "estimated_seconds": 2400,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-09-30-0600-run",
+      "date": "2026-09-30",
+      "time": "06:00",
+      "type": "run",
+      "name": "Calidad 6×3 Z3–Z4",
+      "description": "Fuerte sostenible, técnica limpia, nunca sprint. Usa pecho si tienes banda.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 900,
+          "zone": "Z2"
+        },
+        {
+          "type": "repeat",
+          "times": 6,
+          "steps": [
+            {
+              "type": "interval",
+              "seconds": 180,
+              "zone": "Z4"
+            },
+            {
+              "type": "recovery",
+              "seconds": 120,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "seconds": 600,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-01-0600-bike",
+      "date": "2026-10-01",
+      "time": "06:00",
+      "type": "bike",
+      "name": "Bici fácil 75 min",
+      "description": "RPE 2–4, cadencia cómoda 80–95 rpm. Si aún no tienes bici, sustituye por caminata o elíptica del mismo tiempo; no corras extra.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "effort": "RPE 2"
+        },
+        {
+          "type": "interval",
+          "seconds": 3600,
+          "effort": "RPE 3–4"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "effort": "RPE 2"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-02-0600-swim",
+      "date": "2026-10-02",
+      "time": "06:00",
+      "type": "swim",
+      "name": "Natación S8 · 1150 m",
+      "description": "Alberca de 25 m. Prioriza respiración tranquila y forma; descansa en pared. Sin apnea ni palas.",
+      "steps": [
+        {
+          "type": "warmup",
+          "meters": 200,
+          "effort": "fácil"
+        },
+        {
+          "type": "repeat",
+          "times": 6,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "técnica"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 7,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 100,
+              "effort": "uniforme"
+            },
+            {
+              "type": "recovery",
+              "seconds": 25
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "meters": 100,
+          "effort": "fácil"
+        }
+      ],
+      "estimated_seconds": 3000
+    },
+    {
+      "id": "2026-10-02-1830-strength",
+      "date": "2026-10-02",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Full-body B",
+      "description": "Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          4,
+          1
+        ],
+        [
+          "TRICEPS_EXTENSION",
+          "BODY_WEIGHT_DIP",
+          3,
+          4
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          2,
+          8
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          3,
+          10
+        ],
+        [
+          "LUNGE",
+          "REVERSE_LUNGE_WITH_REACH_BACK",
+          3,
+          8
+        ],
+        [
+          "CALF_RAISE",
+          "STANDING_CALF_RAISE",
+          3,
+          15
+        ]
+      ],
+      "estimated_seconds": 2400,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-10-03-0700-bike",
+      "date": "2026-10-03",
+      "time": "07:00",
+      "type": "bike",
+      "name": "Bici fondo 90 min",
+      "description": "RPE 2–4, cadencia cómoda 80–95 rpm. Si aún no tienes bici, sustituye por caminata o elíptica del mismo tiempo; no corras extra.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "effort": "RPE 2"
+        },
+        {
+          "type": "interval",
+          "seconds": 4500,
+          "effort": "RPE 3–4"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "effort": "RPE 2"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-03-0915-run",
+      "date": "2026-10-03",
+      "time": "09:15",
+      "type": "run",
+      "name": "Transición fácil 15 min",
+      "description": "Empieza sin prisa tras la bici: pasos cortos, 5 min Z1 y luego como máximo Z2.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 300,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 600,
+          "zone": "Z2"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-04-0700-run",
+      "date": "2026-10-04",
+      "time": "07:00",
+      "type": "run",
+      "name": "Fondo fácil 85 min",
+      "description": "Z1–Z2, sin cierre rápido. Puedes caminar 30–60 s cada 10 min desde el inicio.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 4200,
+          "zone": "Z2"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-06-0600-swim",
+      "date": "2026-10-06",
+      "time": "06:00",
+      "type": "swim",
+      "name": "Natación S5 · 1000 m",
+      "description": "Alberca de 25 m. Prioriza respiración tranquila y forma; descansa en pared. Sin apnea ni palas.",
+      "steps": [
+        {
+          "type": "warmup",
+          "meters": 200,
+          "effort": "fácil"
+        },
+        {
+          "type": "repeat",
+          "times": 8,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "técnica"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 5,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 100,
+              "effort": "fácil"
+            },
+            {
+              "type": "recovery",
+              "seconds": 30
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "meters": 100,
+          "effort": "fácil"
+        }
+      ],
+      "estimated_seconds": 3000
+    },
+    {
+      "id": "2026-10-06-1830-strength",
+      "date": "2026-10-06",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Full-body A reducido",
+      "description": "Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          2,
+          1
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          2,
+          10
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          2,
+          8
+        ],
+        [
+          "SQUAT",
+          "AIR_SQUAT",
+          2,
+          12
+        ],
+        [
+          "HIP_RAISE",
+          "SINGLE_LEG_HIP_RAISE",
+          2,
+          10
+        ],
+        [
+          "LEG_RAISE",
+          "HANGING_KNEE_RAISE",
+          2,
+          8
+        ]
+      ],
+      "estimated_seconds": 1800,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-10-07-0600-run",
+      "date": "2026-10-07",
+      "time": "06:00",
+      "type": "run",
+      "name": "Carrera fácil",
+      "description": "Conversacional. Si calor, fatiga o pulso no coinciden, manda RPE 2–3 y no el ritmo.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 1800,
+          "zone": "Z2"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-08-0600-bike",
+      "date": "2026-10-08",
+      "time": "06:00",
+      "type": "bike",
+      "name": "Bici fácil 60 min",
+      "description": "RPE 2–4, cadencia cómoda 80–95 rpm. Si aún no tienes bici, sustituye por caminata o elíptica del mismo tiempo; no corras extra.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "effort": "RPE 2"
+        },
+        {
+          "type": "interval",
+          "seconds": 2700,
+          "effort": "RPE 3–4"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "effort": "RPE 2"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-09-0600-swim",
+      "date": "2026-10-09",
+      "time": "06:00",
+      "type": "swim",
+      "name": "Natación S3 · 900 m",
+      "description": "Alberca de 25 m. Prioriza respiración tranquila y forma; descansa en pared. Sin apnea ni palas.",
+      "steps": [
+        {
+          "type": "warmup",
+          "meters": 200,
+          "effort": "fácil"
+        },
+        {
+          "type": "repeat",
+          "times": 8,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "técnica"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 6,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 50,
+              "effort": "fácil"
+            },
+            {
+              "type": "recovery",
+              "seconds": 25
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 4,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "progresivo relajado"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "meters": 100,
+          "effort": "fácil"
+        }
+      ],
+      "estimated_seconds": 2400
+    },
+    {
+      "id": "2026-10-09-1830-strength",
+      "date": "2026-10-09",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Full-body B reducido",
+      "description": "Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          2,
+          1
+        ],
+        [
+          "TRICEPS_EXTENSION",
+          "BODY_WEIGHT_DIP",
+          2,
+          4
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          2,
+          8
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          2,
+          10
+        ],
+        [
+          "LUNGE",
+          "REVERSE_LUNGE_WITH_REACH_BACK",
+          2,
+          8
+        ],
+        [
+          "CALF_RAISE",
+          "STANDING_CALF_RAISE",
+          2,
+          15
+        ]
+      ],
+      "estimated_seconds": 1800,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-10-10-0700-bike",
+      "date": "2026-10-10",
+      "time": "07:00",
+      "type": "bike",
+      "name": "Bici fondo 75 min",
+      "description": "RPE 2–4, cadencia cómoda 80–95 rpm. Si aún no tienes bici, sustituye por caminata o elíptica del mismo tiempo; no corras extra.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "effort": "RPE 2"
+        },
+        {
+          "type": "interval",
+          "seconds": 3600,
+          "effort": "RPE 3–4"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "effort": "RPE 2"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-10-0915-run",
+      "date": "2026-10-10",
+      "time": "09:15",
+      "type": "run",
+      "name": "Transición fácil 10 min",
+      "description": "Empieza sin prisa tras la bici: pasos cortos, 5 min Z1 y luego como máximo Z2.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 300,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 300,
+          "zone": "Z2"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-11-0700-run",
+      "date": "2026-10-11",
+      "time": "07:00",
+      "type": "run",
+      "name": "Fondo fácil 70 min",
+      "description": "Z1–Z2, sin cierre rápido. Puedes caminar 30–60 s cada 10 min desde el inicio.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 3300,
+          "zone": "Z2"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-13-0600-swim",
+      "date": "2026-10-13",
+      "time": "06:00",
+      "type": "swim",
+      "name": "Benchmark natación",
+      "description": "300 m fácil/técnica; 6 min firmes y uniformes si 200 m continuos ya son cómodos; registra distancia y parciales. Completa fácil hasta 1,000–1,200 m.",
+      "steps": [
+        {
+          "type": "warmup",
+          "meters": 300,
+          "effort": "fácil/técnica"
+        },
+        {
+          "type": "interval",
+          "seconds": 360,
+          "effort": "firme uniforme"
+        },
+        {
+          "type": "cooldown",
+          "meters": 400,
+          "effort": "fácil"
+        }
+      ],
+      "estimated_seconds": 3000
+    },
+    {
+      "id": "2026-10-13-1830-strength",
+      "date": "2026-10-13",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Full-body A",
+      "description": "Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          5,
+          1
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          3,
+          10
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          3,
+          8
+        ],
+        [
+          "SQUAT",
+          "AIR_SQUAT",
+          3,
+          12
+        ],
+        [
+          "HIP_RAISE",
+          "SINGLE_LEG_HIP_RAISE",
+          3,
+          10
+        ],
+        [
+          "LEG_RAISE",
+          "HANGING_KNEE_RAISE",
+          3,
+          8
+        ]
+      ],
+      "estimated_seconds": 2400,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-10-14-0600-run",
+      "date": "2026-10-14",
+      "time": "06:00",
+      "type": "run",
+      "name": "Calidad 5×4 Z3–Z4",
+      "description": "Fuerte sostenible, técnica limpia, nunca sprint. Usa pecho si tienes banda.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 900,
+          "zone": "Z2"
+        },
+        {
+          "type": "repeat",
+          "times": 5,
+          "steps": [
+            {
+              "type": "interval",
+              "seconds": 240,
+              "zone": "Z4"
+            },
+            {
+              "type": "recovery",
+              "seconds": 120,
+              "zone": "Z1"
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "seconds": 900,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-15-0600-bike",
+      "date": "2026-10-15",
+      "time": "06:00",
+      "type": "bike",
+      "name": "Benchmark bici 20 min",
+      "description": "Solo después de al menos 3 rodadas cómodas. Registra potencia si es fiable, FC, cadencia y RPE del bloque de 20 min.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 900,
+          "effort": "fácil"
+        },
+        {
+          "type": "repeat",
+          "times": 3,
+          "steps": [
+            {
+              "type": "interval",
+              "seconds": 60,
+              "effort": "cadencia alta"
+            },
+            {
+              "type": "recovery",
+              "seconds": 120,
+              "effort": "fácil"
+            }
+          ]
+        },
+        {
+          "type": "interval",
+          "seconds": 1200,
+          "effort": "RPE 7 uniforme"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 960,
+          "effort": "fácil"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-16-0600-swim",
+      "date": "2026-10-16",
+      "time": "06:00",
+      "type": "swim",
+      "name": "Natación S9 · 1200 m",
+      "description": "Alberca de 25 m. Prioriza respiración tranquila y forma; descansa en pared. Sin apnea ni palas.",
+      "steps": [
+        {
+          "type": "warmup",
+          "meters": 200,
+          "effort": "fácil"
+        },
+        {
+          "type": "repeat",
+          "times": 8,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "técnica"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 7,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 100,
+              "effort": "fácil"
+            },
+            {
+              "type": "recovery",
+              "seconds": 30
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "meters": 100,
+          "effort": "fácil"
+        }
+      ],
+      "estimated_seconds": 3000
+    },
+    {
+      "id": "2026-10-16-1830-strength",
+      "date": "2026-10-16",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Full-body B",
+      "description": "Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          4,
+          1
+        ],
+        [
+          "TRICEPS_EXTENSION",
+          "BODY_WEIGHT_DIP",
+          3,
+          4
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          2,
+          8
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          3,
+          10
+        ],
+        [
+          "LUNGE",
+          "REVERSE_LUNGE_WITH_REACH_BACK",
+          3,
+          8
+        ],
+        [
+          "CALF_RAISE",
+          "STANDING_CALF_RAISE",
+          3,
+          15
+        ]
+      ],
+      "estimated_seconds": 2400,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-10-17-0700-bike",
+      "date": "2026-10-17",
+      "time": "07:00",
+      "type": "bike",
+      "name": "Bici fondo 105 min",
+      "description": "RPE 2–4, cadencia cómoda 80–95 rpm. Si aún no tienes bici, sustituye por caminata o elíptica del mismo tiempo; no corras extra.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "effort": "RPE 2"
+        },
+        {
+          "type": "interval",
+          "seconds": 5400,
+          "effort": "RPE 3–4"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "effort": "RPE 2"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-17-0915-run",
+      "date": "2026-10-17",
+      "time": "09:15",
+      "type": "run",
+      "name": "Transición fácil 15 min",
+      "description": "Empieza sin prisa tras la bici: pasos cortos, 5 min Z1 y luego como máximo Z2.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 300,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 600,
+          "zone": "Z2"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-18-0700-run",
+      "date": "2026-10-18",
+      "time": "07:00",
+      "type": "run",
+      "name": "Fondo fácil 90 min",
+      "description": "Z1–Z2, sin cierre rápido. Puedes caminar 30–60 s cada 10 min desde el inicio.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 4500,
+          "zone": "Z2"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-20-0600-swim",
+      "date": "2026-10-20",
+      "time": "06:00",
+      "type": "swim",
+      "name": "Natación S5 · 1000 m",
+      "description": "Alberca de 25 m. Prioriza respiración tranquila y forma; descansa en pared. Sin apnea ni palas.",
+      "steps": [
+        {
+          "type": "warmup",
+          "meters": 200,
+          "effort": "fácil"
+        },
+        {
+          "type": "repeat",
+          "times": 8,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "técnica"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 5,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 100,
+              "effort": "fácil"
+            },
+            {
+              "type": "recovery",
+              "seconds": 30
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "meters": 100,
+          "effort": "fácil"
+        }
+      ],
+      "estimated_seconds": 3000
+    },
+    {
+      "id": "2026-10-20-1830-strength",
+      "date": "2026-10-20",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Full-body A reducido",
+      "description": "Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          2,
+          1
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          2,
+          10
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          2,
+          8
+        ],
+        [
+          "SQUAT",
+          "AIR_SQUAT",
+          2,
+          12
+        ],
+        [
+          "HIP_RAISE",
+          "SINGLE_LEG_HIP_RAISE",
+          2,
+          10
+        ],
+        [
+          "LEG_RAISE",
+          "HANGING_KNEE_RAISE",
+          2,
+          8
+        ]
+      ],
+      "estimated_seconds": 1800,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-10-21-0600-run",
+      "date": "2026-10-21",
+      "time": "06:00",
+      "type": "run",
+      "name": "Retest umbral carrera 30 min",
+      "description": "15 min fácil; 30 min al máximo esfuerzo uniforme sostenible; 10–15 min fácil. Guarda distancia, ritmo y FC media de los últimos 20 min.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 900,
+          "zone": "Z2"
+        },
+        {
+          "type": "interval",
+          "seconds": 1800,
+          "effort": "máximo sostenible uniforme"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 600,
+          "zone": "Z1"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-22-0600-bike",
+      "date": "2026-10-22",
+      "time": "06:00",
+      "type": "bike",
+      "name": "Bici fácil 45 min",
+      "description": "RPE 2–4, cadencia cómoda 80–95 rpm. Si aún no tienes bici, sustituye por caminata o elíptica del mismo tiempo; no corras extra.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "effort": "RPE 2"
+        },
+        {
+          "type": "interval",
+          "seconds": 1800,
+          "effort": "RPE 3–4"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "effort": "RPE 2"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-23-0600-swim",
+      "date": "2026-10-23",
+      "time": "06:00",
+      "type": "swim",
+      "name": "Natación S10 · 900 m",
+      "description": "Alberca de 25 m. Prioriza respiración tranquila y forma; descansa en pared. Sin apnea ni palas.",
+      "steps": [
+        {
+          "type": "warmup",
+          "meters": 200,
+          "effort": "fácil"
+        },
+        {
+          "type": "repeat",
+          "times": 8,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 25,
+              "effort": "técnica"
+            },
+            {
+              "type": "recovery",
+              "seconds": 20
+            }
+          ]
+        },
+        {
+          "type": "repeat",
+          "times": 6,
+          "steps": [
+            {
+              "type": "interval",
+              "meters": 75,
+              "effort": "recuperación"
+            },
+            {
+              "type": "recovery",
+              "seconds": 25
+            }
+          ]
+        },
+        {
+          "type": "cooldown",
+          "meters": 50,
+          "effort": "fácil"
+        }
+      ],
+      "estimated_seconds": 2400
+    },
+    {
+      "id": "2026-10-23-1830-strength",
+      "date": "2026-10-23",
+      "time": "18:30",
+      "type": "strength",
+      "name": "Test fuerza",
+      "description": "Prueba: tras calentar, primera serie de pull-ups hasta antes de perder forma; registra repeticiones. Pull-ups son prioridad. Dips solo asistidos, sin dolor y con rango completo. Todas las demás series terminan con 1–2 repeticiones limpias en reserva.",
+      "exercises": [
+        [
+          "PULL_UP",
+          "PULL_UP",
+          1,
+          3
+        ],
+        [
+          "ROW",
+          "RING_ROW",
+          3,
+          10
+        ],
+        [
+          "PUSH_UP",
+          "PUSH_UP",
+          3,
+          8
+        ],
+        [
+          "SQUAT",
+          "AIR_SQUAT",
+          3,
+          12
+        ],
+        [
+          "HIP_RAISE",
+          "SINGLE_LEG_HIP_RAISE",
+          3,
+          10
+        ],
+        [
+          "LEG_RAISE",
+          "HANGING_KNEE_RAISE",
+          3,
+          8
+        ]
+      ],
+      "estimated_seconds": 2400,
+      "focus": "pull-ups y fuerza integral"
+    },
+    {
+      "id": "2026-10-24-0700-bike",
+      "date": "2026-10-24",
+      "time": "07:00",
+      "type": "bike",
+      "name": "Bici recuperación 60 min",
+      "description": "RPE 2–4, cadencia cómoda 80–95 rpm. Si aún no tienes bici, sustituye por caminata o elíptica del mismo tiempo; no corras extra.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "effort": "RPE 2"
+        },
+        {
+          "type": "interval",
+          "seconds": 2700,
+          "effort": "RPE 3–4"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "effort": "RPE 2"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-25-0700-bike",
+      "date": "2026-10-25",
+      "time": "07:00",
+      "type": "bike",
+      "name": "Brick controlado · bici 90 min",
+      "description": "RPE 2–4, cadencia cómoda 80–95 rpm. Si aún no tienes bici, sustituye por caminata o elíptica del mismo tiempo; no corras extra.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 600,
+          "effort": "RPE 2"
+        },
+        {
+          "type": "interval",
+          "seconds": 4500,
+          "effort": "RPE 3–4"
+        },
+        {
+          "type": "cooldown",
+          "seconds": 300,
+          "effort": "RPE 2"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-25-0835-run",
+      "date": "2026-10-25",
+      "time": "08:35",
+      "type": "run",
+      "name": "Transición fácil 30 min",
+      "description": "Empieza sin prisa tras la bici: pasos cortos, 5 min Z1 y luego como máximo Z2.",
+      "steps": [
+        {
+          "type": "warmup",
+          "seconds": 300,
+          "zone": "Z1"
+        },
+        {
+          "type": "interval",
+          "seconds": 1500,
+          "zone": "Z2"
+        }
+      ]
+    }
+  ]
+}

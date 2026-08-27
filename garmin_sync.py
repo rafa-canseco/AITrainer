@@ -1,5 +1,6 @@
 import argparse
 import getpass
+import hashlib
 import json
 import os
 from datetime import date, datetime, timedelta
@@ -7,12 +8,13 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from garminconnect import Garmin
+from garminconnect.exercises import EXERCISES
 from garminconnect.workout import StrengthWorkout, WorkoutSegment, create_strength_set
 
-RUN_PLAN_PATH = Path("plans/running-2026-08-25.json")
-STRENGTH_PLAN_PATH = Path("plans/bodyweight-2026-08-26.json")
-TOKEN_PATH = Path("data/garmin_tokens")
-STATE_PATH = Path("data/garmin_plan_state.json")
+ROOT = Path(__file__).resolve().parent
+PLAN_PATH = ROOT / "plans/olympic-foundation-2026-08-27.json"
+TOKEN_PATH = ROOT / "data/garmin_tokens"
+STATE_PATH = ROOT / "data/garmin_plan_state.json"
 
 
 def garmin_client() -> Garmin:
@@ -107,26 +109,38 @@ def sync_garmin_activities(days: int = 3) -> int:
 
 
 def load_workouts() -> list[dict]:
-    running = json.loads(RUN_PLAN_PATH.read_text())
-    strength = json.loads(STRENGTH_PLAN_PATH.read_text())
-    runs = [
-        {**day, "zones": running["zones"]}
-        for week in running["weeks"]
-        for day in week["days"]
-        if day["type"] == "run"
-    ]
-    return sorted(runs + strength["workouts"], key=lambda item: item["date"])
+    plan = json.loads(PLAN_PATH.read_text())
+    workouts = [{**item, "zones": plan["run_zones"]} for item in plan["workouts"]]
+    supported = {"run", "bike", "swim", "strength"}
+    ids = [item["id"] for item in workouts]
+    if len(ids) != len(set(ids)) or any(item["type"] not in supported for item in workouts):
+        raise ValueError("El plan tiene IDs duplicados o tipos no soportados")
+    valid_exercises = {(item["category"], item["exercise"]) for item in EXERCISES}
+    for item in workouts:
+        date.fromisoformat(item["date"])
+        if any((category, exercise) not in valid_exercises
+               for category, exercise, *_ in item.get("exercises", [])):
+            raise ValueError(f"Ejercicio Garmin no soportado: {item['name']}")
+    return sorted(workouts, key=lambda item: (item["date"], item.get("time", "")))
 
 
-def running_payload(day: dict) -> dict:
+SPORTS = {
+    "run": {"sportTypeId": 1, "sportTypeKey": "running"},
+    "bike": {"sportTypeId": 2, "sportTypeKey": "cycling"},
+    "swim": {"sportTypeId": 4, "sportTypeKey": "swimming"},
+}
+
+
+def endurance_payload(day: dict) -> dict:
+    sport = SPORTS[day["type"]]
     return {
         "workoutName": day["name"],
         "description": day["description"],
-        "sportType": {"sportTypeId": 1, "sportTypeKey": "running"},
-        "estimatedDurationInSecs": estimated_seconds(day["steps"]),
+        "sportType": sport,
+        "estimatedDurationInSecs": day.get("estimated_seconds", estimated_seconds(day["steps"])),
         "workoutSegments": [{
             "segmentOrder": 1,
-            "sportType": {"sportTypeId": 1, "sportTypeKey": "running"},
+            "sportType": sport,
             "workoutSteps": workout_steps(day["steps"], day["zones"]),
         }],
     }
@@ -140,14 +154,22 @@ def strength_payload(day: dict) -> dict:
         order += 3
     return StrengthWorkout(
         workoutName=day["name"],
-        description=f"{day['focus']}. Calienta hombros; 3 rondas de dead hang 30 s + 10 lagartijas. Deja 1 repetición en reserva.",
-        estimatedDurationInSecs=2700,
+        description=day["description"],
+        estimatedDurationInSecs=day.get("estimated_seconds", 2100),
         workoutSegments=[WorkoutSegment(
             segmentOrder=1,
             sportType={"sportTypeId": 5, "sportTypeKey": "strength_training"},
             workoutSteps=steps,
         )],
     ).to_dict()
+
+
+def workout_payload(day: dict) -> dict:
+    return strength_payload(day) if day["type"] == "strength" else endurance_payload(day)
+
+
+def payload_hash(payload: dict) -> str:
+    return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()[:16]
 
 
 def load_state() -> dict:
@@ -176,71 +198,55 @@ def save_state(state: dict) -> None:
     STATE_PATH.write_text(json.dumps(state, indent=2) + "\n")
 
 
-def delete_tracked(client: Garmin, state: dict, *, all_workouts: bool = False) -> None:
+def delete_tracked(
+    client: Garmin, state: dict, *, all_workouts: bool = False, valid_ids: set[str] | None = None,
+) -> None:
     cutoff = date.today().isoformat()
     for key, item in list(state.items()):
-        if not all_workouts and item.get("date", key[:10]) >= cutoff:
+        stale = valid_ids is not None and key not in valid_ids
+        if not all_workouts and not stale and item.get("date", "") >= cutoff:
             continue
         try:
             client.delete_workout(item["workout_id"])
         except Exception as error:
-            print(f"AVISO al borrar {key}: {error}")
-        else:
-            print(f"BORRADO {key}")
+            if "404" not in str(error):
+                print(f"AVISO al borrar {key}: {error}")
+                continue
+        print(f"BORRADO {key}")
         state.pop(key)
         save_state(state)
 
 
-def existing_workouts(client: Garmin) -> dict[str, list[dict]]:
-    result: dict[str, list[dict]] = {}
-    start = 0
-    while True:
-        page = client.get_workouts(start=start, limit=100)
-        if not page:
-            break
-        for workout in page:
-            result.setdefault(workout.get("workoutName", ""), []).append(workout)
-        if len(page) < 100:
-            break
-        start += len(page)
-    return result
-
-
 def upload_plan(push: bool = False, horizon_days: int = 2, replace: bool = False) -> None:
+    workouts = load_workouts()
     client = garmin_client()
     state = load_state()
-    if replace:
-        delete_tracked(client, state, all_workouts=True)
-    else:
-        delete_tracked(client, state)
+    delete_tracked(client, state, all_workouts=replace, valid_ids={item["id"] for item in workouts})
 
     start = date.today()
     end = start + timedelta(days=horizon_days)
-    workouts = [day for day in load_workouts() if start <= date.fromisoformat(day["date"]) <= end]
-    existing = existing_workouts(client)
     for day in workouts:
-        matches = existing.get(day["name"], [])
-        if len(matches) > 1:
-            keep = max(matches, key=lambda item: int(item["workoutId"]))
-            for duplicate in matches:
-                if duplicate["workoutId"] != keep["workoutId"]:
-                    try:
-                        client.delete_workout(duplicate["workoutId"])
-                    except Exception as error:
-                        print(f"AVISO duplicado {duplicate['workoutId']}: {error}")
-            existing[day["name"]] = [keep]
-
-    for day in workouts:
-        key = f"{day['date']} {day['name']}"
-        item = state.setdefault(key, {"date": day["date"], "type": day["type"]})
-        if "workout_id" not in item:
-            matches = existing.get(day["name"], [])
-            if matches:
-                item["workout_id"] = max(matches, key=lambda value: int(value["workoutId"]))["workoutId"]
-            else:
-                payload = running_payload(day) if day["type"] == "run" else strength_payload(day)
-                uploaded = client.upload_workout(payload)
-                item["workout_id"] = uploaded["workoutId"]
+        if not start <= date.fromisoformat(day["date"]) <= end:
+            continue
+        key = day["id"]
+        payload = workout_payload(day)
+        digest = payload_hash(payload)
+        item = state.get(key)
+        if item and item.get("payload_hash") != digest:
+            try:
+                client.delete_workout(item["workout_id"])
+            except Exception as error:
+                if "404" not in str(error):
+                    raise
+            state.pop(key)
+            item = None
+            save_state(state)
+        if not item:
+            uploaded = client.upload_workout(payload)
+            item = state[key] = {
+                "date": day["date"], "type": day["type"],
+                "workout_id": uploaded["workoutId"], "payload_hash": digest,
+            }
             save_state(state)
 
         if not item.get("scheduled"):
