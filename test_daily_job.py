@@ -43,6 +43,26 @@ class GarminRunFallbackTest(unittest.TestCase):
         self.assertIn("running (459 kcal)", summary)
         self.assertNotIn("\\n", summary)
 
+    @patch.object(daily_job, "records")
+    def test_oura_activity_uses_calorie_goal_not_meter_target(self, records):
+        today = date.today().isoformat()
+        records.side_effect = lambda source, kind: [{
+            "day": today,
+            "steps": 2797,
+            "score": 78,
+            "active_calories": 480,
+            "target_calories": 650,
+            "target_meters": 12000,
+            "total_calories": 2896,
+        }] if (source, kind) == ("oura", "daily_activity") else []
+
+        summary = daily_job.daily_activity_summary()
+
+        self.assertIn("Pasos: 2,797", summary)
+        self.assertIn("Score de actividad Oura: 78", summary)
+        self.assertIn("Calorías activas: 480 / meta 650 kcal", summary)
+        self.assertNotIn("12,000", summary)
+
     @patch.object(daily_job, "next_training")
     @patch.object(daily_job.httpx, "post")
     def test_training_email_only_contains_tomorrows_workout(self, post, next_training):

@@ -157,12 +157,17 @@ def daily_activity_summary(target_day: date | None = None) -> str:
             activities.append((name, kcal))
             seen.add(key)
     if activity:
-        steps = activity.get("steps", 0)
-        target = activity.get("target_meters")
-        target_text = f" / meta Oura {target:,}" if isinstance(target, (int, float)) else ""
-        lines = [f"Pasos: {steps:,}{target_text} · {'✅ cumplida' if target and steps >= target else '⏸️ pendiente'}"]
+        lines = [f"Pasos: {activity.get('steps', 0):,}"]
+        if (score := activity.get("score")) is not None:
+            lines.append(f"Score de actividad Oura: {score}")
+        active_calories = activity.get("active_calories")
+        target_calories = activity.get("target_calories")
+        if active_calories is not None:
+            target_text = f" / meta {target_calories:,.0f}" if isinstance(target_calories, (int, float)) else ""
+            status = " · ✅ cumplida" if target_calories and active_calories >= target_calories else " · ⏸️ pendiente"
+            lines.append(f"Calorías activas: {float(active_calories):,.0f}{target_text} kcal{status}")
         if (calories := activity.get("total_calories")) is not None:
-            lines.append(f"Calorías totales quemadas: {float(calories):,.0f} kcal")
+            lines.append(f"Calorías totales: {float(calories):,.0f} kcal")
     elif garmin_summary:
         steps = garmin_summary.get("totalSteps", 0)
         target = garmin_summary.get("dailyStepGoal")
